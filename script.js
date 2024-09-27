@@ -66,7 +66,9 @@ const button = document.getElementById('temp')
 
 
 const keysArray = Object.keys(deck)
-console.log(keysArray.length) //!*you have to push all keys into an array, and then get the array length to find the amount of keys in an object
+// console.log(keysArray.length) //!*you have to push all keys into an array, and then get the array length to find the amount of keys in an object
+
+
 
 function checkEmpty(){
     //* a function to check if any of the keys values from the deck are 0
@@ -75,29 +77,80 @@ function checkEmpty(){
     //forloop goes through all keys in deck
     ///if a key's value = 0, delete[key]
 }
-function generateNums(max){
+function generateRandNums(max){
     //*function to generate random numbers
     return Math.floor(Math.random()*max);
 }
 
-function randomNum(){
+// Get all keys from the object
+
+
+let card = ""
+function generateCard(){
+//check if cards have been dealt
+    const key = Object.keys(deck);
+    let randomCard = (generateRandNums(key.length)) + 1
+    let randomSuite = suites[generateRandNums(suites.length)]
+    // console.log('suite: ' + randomSuite)
+    // console.log('card ' + randomCard)
+    card = randomCard + "_" + randomSuite
+    // let card = randomCard + "_" + randomSuite
+
+    if(cardsDealt.length <52){
+        while (cardsDealt.includes(card)){ //*SOLUTON: run a loop that continues generating random cards as long as the cardsDealt array includes the random card
+            randomCard = (generateRandNums(key.length)) + 1
+            randomSuite = suites[generateRandNums(suites.length)]
+            card = randomCard + "_" + randomSuite
+        }
+        cardsDealt.push(card)
+        return card
+
+    }else{
+        console.log('all cards dealt bozo')
+    }
+
+    // console.log('card: ' + card)
+    // console.log(cardsDealt)
+
+//if the cardsDealt array includes the card, generate new card
+}
+
+let communityCardsArray = [];
+function flipCommunityCards(){
+    let dealt = generateCard() //draw a card
+
     //*function to display the random numbers, this function calls the generateNums() function
     switch(stage){
         case 1:
-            console.log('flop') //generate three random cards
-            console.log(generateNums(keysArray.length))
+            console.log('flop') //draw three random cards
+            for(let i = 0; i < 3; i++){ 
+                dealt = generateCard()
+                communityCardsArray.push(dealt) //add the drawn card to the community cards
+            }
+            console.log(communityCardsArray)
+        break;
+        case 2:
+            console.log('turn')
+            dealt = generateCard()
+            communityCardsArray.push(dealt)
+            console.log(communityCardsArray)
         break;
         case 3:
-            console.log('turn')
-            console.log(generateNums(keysArray.length))
-        break;
-        case 5:
             console.log('river')
-            console.log(generateNums(keysArray.length))
+            dealt = generateCard()
+            communityCardsArray.push(dealt)
+            console.log(communityCardsArray)
         break;
         default:
             console.log('bruh error')
         break;
     }
     stage++;
-}
+ }
+
+//TODO:FOR GENERATING CARDS---------------------
+//TODO: Generate random card
+//TODO: Check if the random card has already been dealt
+//TODO: IF no, deal the cards once the card is cleared
+//TODO: IF yes, reroll new card
+//TODO:

@@ -9,7 +9,7 @@
 //ace 1
 
 
-let stage = 0;
+let stage = 1;
 //stage 0 = pre flop bet
 //stage 1 = flop
 //stage 2 = bet
@@ -69,14 +69,6 @@ const keysArray = Object.keys(deck)
 // console.log(keysArray.length) //!*you have to push all keys into an array, and then get the array length to find the amount of keys in an object
 
 
-
-function checkEmpty(){
-    //* a function to check if any of the keys values from the deck are 0
-    //* if they are, remove them
-
-    //forloop goes through all keys in deck
-    ///if a key's value = 0, delete[key]
-}
 function generateRandNums(max){
     //*function to generate random numbers
     return Math.floor(Math.random()*max);
@@ -117,28 +109,26 @@ function generateCard(){
 
 let communityCardsArray = [];
 function flipCommunityCards(){
-    let dealt = generateCard() //draw a card
 
+    // console.log(cardsDealt)
     //*function to display the random numbers, this function calls the generateNums() function
     switch(stage){
         case 1:
             console.log('flop') //draw three random cards
             for(let i = 0; i < 3; i++){ 
-                dealt = generateCard()
-                communityCardsArray.push(dealt) //add the drawn card to the community cards
+
+                communityCardsArray.push(generateCard()) //add the drawn card to the community cards
             }
             console.log(communityCardsArray)
         break;
         case 2:
             console.log('turn')
-            dealt = generateCard()
-            communityCardsArray.push(dealt)
+            communityCardsArray.push(generateCard())
             console.log(communityCardsArray)
         break;
         case 3:
             console.log('river')
-            dealt = generateCard()
-            communityCardsArray.push(dealt)
+            communityCardsArray.push(generateCard())
             console.log(communityCardsArray)
         break;
         default:
@@ -146,11 +136,23 @@ function flipCommunityCards(){
         break;
     }
     stage++;
- }
+}
 
-//TODO:FOR GENERATING CARDS---------------------
-//TODO: Generate random card
-//TODO: Check if the random card has already been dealt
-//TODO: IF no, deal the cards once the card is cleared
-//TODO: IF yes, reroll new card
-//TODO:
+let hand = []
+function dealCards(){
+    for(let i = 0; i < 2; i++){
+        hand.push(generateCard())
+    }
+
+    console.log(hand)
+    // console.log('cards dealt ' + cardsDealt)
+}
+
+function bet(){
+
+}
+
+//TODO: add betting function, to bet
+//TODO: display the community cards and your hand (try ascii first)
+//TODO: create card assets
+

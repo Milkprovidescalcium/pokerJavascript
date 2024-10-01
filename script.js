@@ -69,6 +69,15 @@ const keysArray = Object.keys(deck)
 // console.log(keysArray.length) //!*you have to push all keys into an array, and then get the array length to find the amount of keys in an object
 
 
+let wholeHandVals = [];
+let wholeHandSuites = [];
+
+let handVals = [];
+let handSuites =[];
+
+let communityVals = [];
+let communitySuites =[];
+
 function generateRandNums(max){
     //*function to generate random numbers
     return Math.floor(Math.random()*max);
@@ -95,7 +104,11 @@ function generateCard(){
             card = randomCard + "_" + randomSuite
         }
         cardsDealt.push(card)
-        return card
+       
+        communityVals.push(randomCard)
+        communitySuites.push(randomSuite)
+        return card;
+
 
     }else{
         console.log('all cards dealt bozo')
@@ -108,6 +121,7 @@ function generateCard(){
 }
 
 let communityCardsArray = [];
+let cardDrawn;
 function flipCommunityCards(){
 
     // console.log(cardsDealt)
@@ -117,18 +131,32 @@ function flipCommunityCards(){
             console.log('flop') //draw three random cards
             for(let i = 0; i < 3; i++){ 
 
-                communityCardsArray.push(generateCard()) //add the drawn card to the community cards
+                cardDrawn = generateCard()
+                communityCardsArray.push(cardDrawn) //add the drawn card to the community cards
+                communitySuites.push(cardDrawn.split('_')[1])
+                communityVals.push(cardDrawn.split('_')[0])
+                // let temp = cardDrawn.split('_')[1]
+                // console.log(temp)
             }
             console.log(communityCardsArray)
         break;
         case 2:
             console.log('turn')
-            communityCardsArray.push(generateCard())
+
+            cardDrawn = generateCard()
+            communityCardsArray.push(cardDrawn) //add the drawn card to the community cards
+            communitySuites.push(cardDrawn.split('_')[1])
+            communityVals.push(cardDrawn.split('_')[0])
             console.log(communityCardsArray)
         break;
         case 3:
             console.log('river')
-            communityCardsArray.push(generateCard())
+            cardDrawn = generateCard()
+            communityCardsArray.push(cardDrawn) //add the drawn card to the community cards
+            communitySuites.push(cardDrawn.split('_')[1])
+            communityVals.push(cardDrawn.split('_')[0])
+            
+          
             console.log(communityCardsArray)
         break;
         default:
@@ -141,18 +169,73 @@ function flipCommunityCards(){
 let hand = []
 function dealCards(){
     for(let i = 0; i < 2; i++){
-        hand.push(generateCard())
+        let cardDrawn = generateCard()
+        hand.push(cardDrawn)
+        handSuites.push(cardDrawn.split('_')[1])
+        handVals.push(cardDrawn.split('_')[0])
     }
+    console.log('hand: ' + hand)
 
-    console.log(hand)
     // console.log('cards dealt ' + cardsDealt)
 }
 
 function bet(){
 
 }
+function checkFlush(){
+    //*if suite appears 5 times in whole hand, return true
+}
+function combineArrays(){
+    wholeHandVals = wholeHandVals.concat(handVals, communityVals);
+    wholeHandSuites = wholeHandSuites.concat(handSuites, communitySuites);
 
+
+    console.log('whole hand values: ' + wholeHandVals);
+    console.log('whole hand suites: ' + wholeHandSuites);
+}
+
+let startingIndex = 0;
+let difference = -1;
+
+let tempArray = [1,2,3,4,5,6]
+function checkStraight(){
+    for(let i = 1; i < tempArray.length; i++){
+        let startingIndex = tempArray[0]
+        if(startingIndex - tempArray[i] === difference){
+            difference--;
+            console.log('passed')
+
+        }else{
+            break
+        }
+
+    }
+    if(difference <= -5){
+        console.log('is a straight!')
+    }else{
+        console.log('not a straight :(')
+    }
+}
+
+function checkPair(){
+
+}
+function checkThree(){
+
+}
+function checkFour(){
+
+}
+function checkFull(){
+    //* if checkPair, and checkThree both return true, return true
+}
 //TODO: add betting function, to bet
 //TODO: display the community cards and your hand (try ascii first)
 //TODO: create card assets
 
+
+//Oct-1-2024---------
+//!PROBLEM, when I'm trying to push the seperate values and suites to the wholeHand array
+//!i'm calling the generateCard function AGAIN, which causes a new value and array to be generated
+//*SOLUTION: split the existing card into two parts, and push those parts to the respective arrays
+//!PROBLEM, values appear twice in the console log, uhh why?

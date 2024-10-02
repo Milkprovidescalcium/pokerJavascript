@@ -51,6 +51,7 @@ let deck = {
 };
 //*making an array of suites, then when a random value from decks is created, it's then assigned a random suite
 let suites = ['hearts', 'diamonds', 'clubs', 'spades']
+let values = [1,2,3,4,5,6,7,8,9,10,11,12,13];
 
     
 //*AND THENNN, AFTER A RANDOM CARD AND SUITE IS MADE
@@ -137,6 +138,7 @@ function flipCommunityCards(){
                 // let temp = cardDrawn.split('_')[1]
                 // console.log(temp)
             }
+            document.getElementById('board').innerHTML = communityCardsArray
             console.log(communityCardsArray)
         break;
         case 2:
@@ -145,6 +147,7 @@ function flipCommunityCards(){
             cardDrawn = generateCard()
             communityCardsArray.push(cardDrawn) //add the drawn card to the community cards
       
+            document.getElementById('board').innerHTML = communityCardsArray
             console.log(communityCardsArray)
         break;
         case 3:
@@ -153,7 +156,7 @@ function flipCommunityCards(){
             communityCardsArray.push(cardDrawn) //add the drawn card to the community cards
        
             
-          
+            document.getElementById('board').innerHTML = communityCardsArray
             console.log(communityCardsArray)
         break;
         default:
@@ -171,12 +174,21 @@ function dealCards(){
   
     }
     console.log('hand: ' + hand)
+    document.getElementById('hand').innerHTML = hand
 
     // console.log('cards dealt ' + cardsDealt)
 }
 
-function bet(){
+let pot = 0;
+let howMuch = 10;
 
+let potDiv = document.getElementById('pot')
+let handDiv = document.getElementById('balance') 
+function bet(){
+    balance -=howMuch
+    pot += howMuch
+    potDiv.innerHTML = pot
+    handDiv.innerHTML = balance
 }
 
 function combineArrays(){
@@ -191,8 +203,8 @@ function combineArrays(){
         return a - b;
     });
 
-    console.log('whole hand values: ' + wholeHandVals);
-    console.log('whole hand suites: ' + wholeHandSuites);
+    // console.log('whole hand values: ' + wholeHandVals);
+    // console.log('whole hand suites: ' + wholeHandSuites);
 }
 // let tempArray = ["diamonds", "diamonds", "hearts","hearts","hearts","hearts","spades"]
 
@@ -207,12 +219,12 @@ function checkFlush(){
                 count++;
             }
             if(count >= 5){
-                console.log('is a flush!')
+                // console.log('is a flush!')
                 return true;
             }
         }
     }
-    console.log('not a flush :(')
+    // console.log('not a flush :(')
     return false;
     
 }
@@ -231,36 +243,127 @@ function checkStraight(){
             startingIndex = wholeHandVals[0]
             if(startingIndex - wholeHandVals[index + i] === difference){
                 difference--;
-                console.log('passed')
+                // console.log('passed')
             }else{
                 startingIndex = wholeHandVals[1]
                 break
             }
         }
         if(difference <= -5){
-            console.log('is a straight!')
-            return;
+            // console.log('is a straight!')
+            return true;
         }
     }
-    console.log('not a straight :(')
+    // console.log('not a straight :(')
+    return false;
 }
 
 function checkPair(){
+    let pairNum = 0;
+
+    for(let index = 0; index < values.length; index++){ //checking for every possible suite if is contained in the array of suites in hand
+        let searchPair = values[index];
+        let pairCount = 0;  
+
+        for(let i = 0; i < wholeHandVals.length; i++){
+            if(wholeHandVals[i]===searchPair){//if it's found a suite that matches 'searchString' which is checked for every suite 
+                pairCount++;
+            }
+            if(pairCount === 2){
+                // console.log('is a pair!')
+                return true;
+            }
+        }
+    }
+    // console.log('not a pair :(')
+    return false;
 
 }
 function checkThree(){
 
+    for(let index = 0; index < values.length; index++){ //checking for every possible suite if is contained in the array of suites in hand
+        let searchThree = values[index];
+        let threeCount = 0;  
+
+        for(let i = 0; i < wholeHandVals.length; i++){
+            if(wholeHandVals[i]===searchThree){//if it's found a suite that matches 'searchString' which is checked for every suite 
+                threeCount++;
+            }
+            if(threeCount === 3){
+                // console.log('is a three!')
+                return true;
+            }
+        }
+    }
+    // console.log('not a three :(')
+    return false;
+
 }
 function checkFour(){
+    for(let index = 0; index < values.length; index++){ //checking for every possible suite if is contained in the array of suites in hand
+        let searchFour = values[index];
+        let fourCount = 0;  
 
+        for(let i = 0; i < wholeHandVals.length; i++){
+            if(wholeHandVals[i]===searchFour){//if it's found a suite that matches 'searchString' which is checked for every suite 
+                fourCount++;
+            }
+            if(fourCount === 4){
+                // console.log('is a four!')
+                return true;
+            }
+        }
+    }
+    // console.log('not a four :(')
+    return false;
 }
 function checkFull(){
     //* if checkPair, and checkThree both return true, return true
+    if(checkThree() && checkPair()){
+        // console.log('is a full!')
+        return true;
+    }else{
+        // console.log('not a full :(')
+        return false;
+    }
 }
-//TODO: add betting function, to bet
-//TODO: display the community cards and your hand (try ascii first)
-//TODO: create card assets
 
+function checkHand(){
+    combineArrays()
+
+    checkPair()
+    checkThree()
+    checkFour()
+    checkFlush()
+    checkFull()
+    checkStraight()
+    if(checkStraight()){
+        console.log('straight!')
+    }else if(checkFour()){
+        console.log('four of a kind!')
+    }else if(checkFull()){
+        console.log('full house!')
+    }else if(checkFlush()){
+        console.log('flush!')
+    }else if(checkThree()){
+        console.log('three of a kind!')
+    }else if(checkPair()){
+        console.log('pair!')
+    }else{
+        console.log('wow you have nothing!')
+    }
+
+    console.log('you win the ' + potDiv.innerHTML + ' pot')
+    balance += pot
+    pot = 0
+    potDiv.innerHTML = pot
+    handDiv.innerHTML = balance
+
+   
+}
+
+//TODO: add bad bots, like the bots go all in every time
+//TODO: check how many pairs are in your hand
 
 //Oct-1-2024---------
 //!PROBLEM, when I'm trying to push the seperate values and suites to the wholeHand array

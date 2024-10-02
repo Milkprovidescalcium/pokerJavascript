@@ -239,3 +239,4 @@ function checkFull(){
 //!i'm calling the generateCard function AGAIN, which causes a new value and array to be generated
 //*SOLUTION: split the existing card into two parts, and push those parts to the respective arrays
 //!PROBLEM, values appear twice in the console log, uhh why?
+

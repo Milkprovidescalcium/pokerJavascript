@@ -133,8 +133,7 @@ function flipCommunityCards(){
 
                 cardDrawn = generateCard()
                 communityCardsArray.push(cardDrawn) //add the drawn card to the community cards
-                communitySuites.push(cardDrawn.split('_')[1])
-                communityVals.push(cardDrawn.split('_')[0])
+             
                 // let temp = cardDrawn.split('_')[1]
                 // console.log(temp)
             }
@@ -145,16 +144,14 @@ function flipCommunityCards(){
 
             cardDrawn = generateCard()
             communityCardsArray.push(cardDrawn) //add the drawn card to the community cards
-            communitySuites.push(cardDrawn.split('_')[1])
-            communityVals.push(cardDrawn.split('_')[0])
+      
             console.log(communityCardsArray)
         break;
         case 3:
             console.log('river')
             cardDrawn = generateCard()
             communityCardsArray.push(cardDrawn) //add the drawn card to the community cards
-            communitySuites.push(cardDrawn.split('_')[1])
-            communityVals.push(cardDrawn.split('_')[0])
+       
             
           
             console.log(communityCardsArray)
@@ -171,8 +168,7 @@ function dealCards(){
     for(let i = 0; i < 2; i++){
         let cardDrawn = generateCard()
         hand.push(cardDrawn)
-        handSuites.push(cardDrawn.split('_')[1])
-        handVals.push(cardDrawn.split('_')[0])
+  
     }
     console.log('hand: ' + hand)
 
@@ -182,39 +178,71 @@ function dealCards(){
 function bet(){
 
 }
-function checkFlush(){
-    //*if suite appears 5 times in whole hand, return true
-}
+
 function combineArrays(){
+    wholeHandVals = []; 
+    wholeHandSuites = []; 
+
     wholeHandVals = wholeHandVals.concat(handVals, communityVals);
     wholeHandSuites = wholeHandSuites.concat(handSuites, communitySuites);
 
+    //this function sorts the array numerically
+    wholeHandVals.sort(function(a, b) {
+        return a - b;
+    });
 
     console.log('whole hand values: ' + wholeHandVals);
     console.log('whole hand suites: ' + wholeHandSuites);
 }
+// let tempArray = ["diamonds", "diamonds", "hearts","hearts","hearts","hearts","spades"]
+
+function checkFlush(){
+    //*if suite appears 5 times in whole hand, return true
+    for(let index = 0; index < suites.length; index++){ //checking for every possible suite if is contained in the array of suites in hand
+        let searchString = suites[index];
+        let count = 0;  
+
+        for(let i = 0; i < wholeHandSuites.length; i++){
+            if(wholeHandSuites[i]===searchString){//if it's found a suite that matches 'searchString' which is checked for every suite 
+                count++;
+            }
+            if(count >= 5){
+                console.log('is a flush!')
+                return true;
+            }
+        }
+    }
+    console.log('not a flush :(')
+    return false;
+    
+}
 
 let startingIndex = 0;
 let difference = -1;
-
-let tempArray = [1,2,3,4,5,6]
+// let tempArray = [2,3,3,4,5,6,7]
 function checkStraight(){
-    for(let i = 1; i < tempArray.length; i++){
-        let startingIndex = tempArray[0]
-        if(startingIndex - tempArray[i] === difference){
-            difference--;
-            console.log('passed')
 
-        }else{
-            break
+
+//*checking through all the values in the array, comapring them to the next value above it, by the difference variable
+    for(let index = 0; index < wholeHandVals.length; index++){
+        difference = -1; 
+
+        for(let i = 1; i < wholeHandVals.length - index; i++){
+            startingIndex = wholeHandVals[0]
+            if(startingIndex - wholeHandVals[index + i] === difference){
+                difference--;
+                console.log('passed')
+            }else{
+                startingIndex = wholeHandVals[1]
+                break
+            }
         }
-
+        if(difference <= -5){
+            console.log('is a straight!')
+            return;
+        }
     }
-    if(difference <= -5){
-        console.log('is a straight!')
-    }else{
-        console.log('not a straight :(')
-    }
+    console.log('not a straight :(')
 }
 
 function checkPair(){
@@ -239,4 +267,5 @@ function checkFull(){
 //!i'm calling the generateCard function AGAIN, which causes a new value and array to be generated
 //*SOLUTION: split the existing card into two parts, and push those parts to the respective arrays
 //!PROBLEM, values appear twice in the console log, uhh why?
+//*SOLUTION: you dummy! you were pushing the values to the array twice! You were already pushing them in the generateCards() function, and you pushed them again when drawing and flipping! How silly
 

@@ -260,10 +260,14 @@ function checkStraight(){
 
 function checkPair(){
     let pairNum = 0;
+    let countedPairs = new Set(); //*sets in javascript are objects that store UNIQUE values, if you try to give a duplicate value, the duplicate value will be ignored
 
     for(let index = 0; index < values.length; index++){ //checking for every possible suite if is contained in the array of suites in hand
         let searchPair = values[index];
         let pairCount = 0;  
+        if (countedPairs.has(searchPair)) {
+            continue;  // if searchValue is already found in the set, skip the value
+        }
 
         for(let i = 0; i < wholeHandVals.length; i++){
             if(wholeHandVals[i]===searchPair){//if it's found a suite that matches 'searchString' which is checked for every suite 
@@ -271,12 +275,14 @@ function checkPair(){
             }
             if(pairCount === 2){
                 // console.log('is a pair!')
-                return true;
+                pairNum++;
+                countedPairs.add(searchPair);
+                break;
             }
         }
     }
     // console.log('not a pair :(')
-    return false;
+    return pairNum;
 
 }
 function checkThree(){
@@ -348,7 +354,7 @@ function checkHand(){
     }else if(checkThree()){
         console.log('three of a kind!')
     }else if(checkPair()){
-        console.log('pair!')
+        console.log(checkPair() + ' pairs!')
     }else{
         console.log('wow you have nothing!')
     }

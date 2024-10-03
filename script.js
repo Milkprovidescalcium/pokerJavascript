@@ -138,7 +138,7 @@ function flipCommunityCards(){
                 // let temp = cardDrawn.split('_')[1]
                 // console.log(temp)
             }
-            document.getElementById('board').innerHTML = communityCardsArray
+            document.getElementById('communityCards').innerHTML = communityCardsArray
             console.log(communityCardsArray)
         break;
         case 2:
@@ -147,7 +147,7 @@ function flipCommunityCards(){
             cardDrawn = generateCard()
             communityCardsArray.push(cardDrawn) //add the drawn card to the community cards
       
-            document.getElementById('board').innerHTML = communityCardsArray
+            document.getElementById('communityCards').innerHTML = communityCardsArray
             console.log(communityCardsArray)
         break;
         case 3:
@@ -156,7 +156,7 @@ function flipCommunityCards(){
             communityCardsArray.push(cardDrawn) //add the drawn card to the community cards
        
             
-            document.getElementById('board').innerHTML = communityCardsArray
+            document.getElementById('communityCards').innerHTML = communityCardsArray
             console.log(communityCardsArray)
         break;
         default:
@@ -334,6 +334,9 @@ function checkFull(){
     }
 }
 
+let resultDiv = document.getElementById('result')
+let resultText = ''
+let winResultDiv = document.getElementById('winResult')
 function checkHand(){
     combineArrays()
 
@@ -344,22 +347,32 @@ function checkHand(){
     checkFull()
     checkStraight()
     if(checkStraight()){
-        console.log('straight!')
+        // console.log('straight!')
+        resultText = 'straight'
     }else if(checkFour()){
-        console.log('four of a kind!')
+        // console.log('four of a kind!')
+        resultText = 'four of a kind!'
     }else if(checkFull()){
-        console.log('full house!')
+        // console.log('full house!')
+        resultText = 'full house!'
     }else if(checkFlush()){
-        console.log('flush!')
+        // console.log('flush!')
+        resultText = 'flush!'
     }else if(checkThree()){
-        console.log('three of a kind!')
+        // console.log('three of a kind!')
+        resultText = 'three of a kind!'
     }else if(checkPair()){
-        console.log(checkPair() + ' pairs!')
+        // console.log(checkPair() + ' pairs!')
+        resultText = checkPair() + ' pairs!'
     }else{
-        console.log('wow you have nothing!')
+        // console.log('wow you have nothing!')
+        resultText = 'wow you have nothing!'
     }
 
-    console.log('you win the ' + potDiv.innerHTML + ' pot')
+    // console.log('you win the ' + potDiv.innerHTML + ' pot')
+    resultDiv.innerHTML = resultText
+
+    winResultDiv.innerHTML =  'you win the pot of ' + potDiv.innerHTML
     balance += pot
     pot = 0
     potDiv.innerHTML = pot

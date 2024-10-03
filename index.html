@@ -7,20 +7,49 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>GAMBLING</h1>
-    <span>balance: </span>
-    <div id = "balance" class = "balance">0</div>
-    <span>pot: </span>
-    <div id = "pot" class = "pot">0</div>
-    <br>
-    <span>hand: </span>
-    <div id = "hand" class = "hand">hand</div>
-    <span>board: </span>
-    <div id = "board" class = "board">board</div>
-    <br>
-    <button onclick="flipCommunityCards()"type = "button" id = "flipButton">flip</button>
-    <button onclick="dealCards()"type = "button" id = "dealButton">deal</button>
-    <button onclick="bet()"type = "button" id = "betButton">bet</button>
+
+    <div id = 'pageContainer' class = 'page-container'>
+
+        <div id = 'balanceContainer' class = 'balance-container'>
+            <span>balance: </span>
+            <div id = "balance" class = "balance">0</div>
+            <br>
+        </div>
+        <div id = 'table' class = 'table'>
+
+            <div id = 'boardContainer' class = 'board-container'>
+                <div id = "board" class = "board">
+                    <div id = "boardContentContainer" class = 'board-content-container'>
+                        <div id = 'communityCards' class = 'community-cards'>board</div>
+                        <div id="potContainer" class = 'pot-container'>
+                            <span>pot: </span>
+                            <div id = "pot" class = "pot">0</div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="handContainer" class = 'hand-container'>
+                <span>hand: </span>
+                <div id = "hand" class = "hand">hand</div>
+            </div>
+            
+    
+
+            <div id = 'resultsContainer' class = 'results-container'>
+                <div id = "result" class = "result">result</div>
+                <div id = "winResult" class = "win-result">winResult</div>
+            </div>
+            <div id = 'buttonContainer' class = 'button-container'>
+                <button onclick="flipCommunityCards()"type = "button" id = "flipButton">flip</button>
+                <button onclick="dealCards()"type = "button" id = "dealButton">deal</button>
+                <button onclick="bet()"type = "button" id = "betButton">bet</button>
+                <button onclick="checkHand()"type = "button" id = "checkHand">No more action!</button>
+            </div>
+        </div>
+    </div>
     <!--TEMP BUTTONS, TO CHECK FUNCTIONS
     <button onclick="combineArrays()"type = "button" id = "combine">combine</button>
     <button onclick="checkFlush()"type = "button" id = "checkFlush">checkFlush</button>
@@ -31,7 +60,7 @@
     <button onclick="checkStraight()"type = "button" id = "checkStraight">checkStraight</button>
     -->
     
-    <button onclick="checkHand()"type = "button" id = "checkHand">No more action!</button>
+
 <script src = "script.js"></script>
 </body>
 </html>

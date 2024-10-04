@@ -3,45 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Poker</title>
+    <title>Texas Hold em!</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
     <div id = 'pageContainer' class = 'page-container'>
-
+      
         <div id = 'balanceContainer' class = 'balance-container'>
             <span>balance: </span>
             <div id = "balance" class = "balance">0</div>
             <br>
         </div>
         <div id = 'table' class = 'table'>
-
-            <div id = 'boardContainer' class = 'board-container'>
-                <div id = "board" class = "board">
-                    <div id = "boardContentContainer" class = 'board-content-container'>
-                        <div id = 'communityCards' class = 'community-cards'>board</div>
-                        <div id="potContainer" class = 'pot-container'>
-                            <span>pot: </span>
-                            <div id = "pot" class = "pot">0</div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div id="handContainer" class = 'hand-container'>
-                <span>hand: </span>
-                <div id = "hand" class = "hand">hand</div>
-            </div>
-            
-    
-
             <div id = 'resultsContainer' class = 'results-container'>
                 <div id = "result" class = "result">result</div>
                 <div id = "winResult" class = "win-result">winResult</div>
             </div>
+
+            <div id = 'boardContainer' class = 'board-container'>
+                <div id = "board" class = "board">
+                    <div id="potContainer" class = 'pot-container'>
+                        <span>pot: </span>
+                        <div id = "pot" class = "pot">0</div>
+
+                    </div>
+                    <div id = "boardContentContainer" class = 'board-content-container'>
+                      
+                     
+                        <div id = 'communityCards' class = 'community-cards'>board</div>
+                        <div id = 'communityCardImages' class='community-card-images'>
+                            <div class="card-wrapper">
+                                <div id = "card1" class = 'card'></div>
+                            </div>
+                            <div class="card-wrapper">
+                                <div id = "card2" class = 'card'></div>
+                            </div>
+                            <div class="card-wrapper">
+                                <div id = "card3" class = 'card'></div>
+                            </div>
+                            <div class="card-wrapper">
+                                <div id = "card4" class = 'card'></div>
+                            </div>
+                            <div class="card-wrapper">
+                                <div id = "card5" class = 'card'></div>
+                            </div>
+                        
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+
+            <div id = "hotbar" class="hotbar">
+                <div id="handContainer" class = 'hand-container'>
+                    <span>hand: </span>
+                    <div id = "hand" class = "hand">hand</div>
+                </div>
+                <div id = 'handCardImages' class='hand-card-images'>
+                    <div class="card-wrapper">
+                        <div id = "handCard1" class = 'card'></div>
+                    </div>
+                    <div class="card-wrapper">
+                        <div id = "handCard2" class = 'card'></div>
+                    </div>
+
+                
+                </div>
+            </div>
+      
+          
             <div id = 'buttonContainer' class = 'button-container'>
                 <button onclick="flipCommunityCards()"type = "button" id = "flipButton">flip</button>
                 <button onclick="dealCards()"type = "button" id = "dealButton">deal</button>

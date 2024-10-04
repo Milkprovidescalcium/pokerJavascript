@@ -29,6 +29,69 @@ let stage = 1;
 //*straight flush
 //*royal flush
 
+
+const cardImages = {
+    'BACK': 'light/BACK.png',
+    //CLUBS
+    '1_clubs': 'light/A-C.png',
+    '2_clubs': 'light/2-C.png',
+    '3_clubs': 'light/3-C.png',
+    '4_clubs': 'light/4-C.png',
+    '5_clubs': 'light/5-C.png',
+    '6_clubs': 'light/6-C.png',
+    '7_clubs': 'light/7-C.png',
+    '8_clubs': 'light/8-C.png',
+    '9_clubs': 'light/9-C.png',
+    '10_clubs': 'light/10-C.png',
+    '11_clubs': 'light/J-C.png',
+    '12_clubs': 'light/Q-C.png',
+    '13_clubs': 'light/K-C.png',
+    //DIAMONDS
+    '1_diamonds': 'light/A-D.png',
+    '2_diamonds': 'light/2-D.png',
+    '3_diamonds': 'light/3-D.png',
+    '4_diamonds': 'light/4-D.png',
+    '5_diamonds': 'light/5-D.png',
+    '6_diamonds': 'light/6-D.png',
+    '7_diamonds': 'light/7-D.png',
+    '8_diamonds': 'light/8-D.png',
+    '9_diamonds': 'light/9-D.png',
+    '10_diamonds': 'light/10-D.png',
+    '11_diamonds': 'light/J-D.png',
+    '12_diamonds': 'light/Q-D.png',
+    '13_diamonds': 'light/K-D.png',
+    //HEARTS
+    '1_hearts': 'light/A-H.png',
+    '2_hearts': 'light/2-H.png',
+    '3_hearts': 'light/3-H.png',
+    '4_hearts': 'light/4-H.png',
+    '5_hearts': 'light/5-H.png',
+    '6_hearts': 'light/6-H.png',
+    '7_hearts': 'light/7-H.png',
+    '8_hearts': 'light/8-H.png',
+    '9_hearts': 'light/9-H.png',
+    '10_hearts': 'light/10-H.png',
+    '11_hearts': 'light/J-H.png',
+    '12_hearts': 'light/Q-H.png',
+    '13_hearts': 'light/K-H.png',
+    //SPADES
+    '1_spades': 'light/A-P.png',
+    '2_spades': 'light/2-P.png',
+    '3_spades': 'light/3-P.png',
+    '4_spades': 'light/4-P.png',
+    '5_spades': 'light/5-P.png',
+    '6_spades': 'light/6-P.png',
+    '7_spades': 'light/7-P.png',
+    '8_spades': 'light/8-P.png',
+    '9_spades': 'light/9-P.png',
+    '10_spades': 'light/10-P.png',
+    '11_spades': 'light/J-P.png',
+    '12_spades': 'light/Q-P.png',
+    '13_spades': 'light/K-P.png',
+
+
+}
+
 //!PROBLEM, I dont know how do have 'limits' on my cards, like
 //! you cant draw 5 jacks right? but how do I limit that?
 //?maybe make an object filled with all card types, and then subract when cards are drawn?
@@ -121,6 +184,26 @@ function generateCard(){
 //if the cardsDealt array includes the card, generate new card
 }
 
+
+
+
+
+function setCardImage(card,which) {
+    // console.log(card)
+    // console.log(which)
+    let cardDiv = document.getElementById('card' + which.toString());
+    cardDiv.style.backgroundImage = `url(${cardImages[card]})`;
+}
+function setCardImageDeal(card,which) { //*I KNOW IT'S BAD PRACTICE SHUT UP
+    console.log(card)
+    console.log(which)
+    let cardDiv = document.getElementById('handCard' + which.toString());
+    cardDiv.style.backgroundImage = `url(${cardImages[card]})`;
+}
+
+
+
+
 let communityCardsArray = [];
 let cardDrawn;
 function flipCommunityCards(){
@@ -134,12 +217,13 @@ function flipCommunityCards(){
 
                 cardDrawn = generateCard()
                 communityCardsArray.push(cardDrawn) //add the drawn card to the community cards
-             
+                let whichCard = i +1
+                setCardImage(cardDrawn,whichCard)
                 // let temp = cardDrawn.split('_')[1]
                 // console.log(temp)
             }
             document.getElementById('communityCards').innerHTML = communityCardsArray
-            console.log(communityCardsArray)
+            // console.log(communityCardsArray)
         break;
         case 2:
             console.log('turn')
@@ -148,7 +232,8 @@ function flipCommunityCards(){
             communityCardsArray.push(cardDrawn) //add the drawn card to the community cards
       
             document.getElementById('communityCards').innerHTML = communityCardsArray
-            console.log(communityCardsArray)
+            // console.log(communityCardsArray)
+            setCardImage(cardDrawn,4)
         break;
         case 3:
             console.log('river')
@@ -157,7 +242,8 @@ function flipCommunityCards(){
        
             
             document.getElementById('communityCards').innerHTML = communityCardsArray
-            console.log(communityCardsArray)
+            // console.log(communityCardsArray)
+            setCardImage(cardDrawn,5)
         break;
         default:
             console.log('bruh error')
@@ -167,12 +253,19 @@ function flipCommunityCards(){
 }
 
 let hand = []
+let dealt = false;
 function dealCards(){
-    for(let i = 0; i < 2; i++){
-        let cardDrawn = generateCard()
-        hand.push(cardDrawn)
-  
+    if(!dealt){
+        for(let i = 0; i < 2; i++){
+            let cardDrawn = generateCard()
+            hand.push(cardDrawn)
+            let whichCard = i +1
+            setCardImageDeal(cardDrawn,whichCard)
+            dealt = true;
+        }
     }
+
+
     console.log('hand: ' + hand)
     document.getElementById('hand').innerHTML = hand
 
@@ -381,8 +474,9 @@ function checkHand(){
    
 }
 
+
 //TODO: add bad bots, like the bots go all in every time
-//TODO: check how many pairs are in your hand
+
 
 //Oct-1-2024---------
 //!PROBLEM, when I'm trying to push the seperate values and suites to the wholeHand array

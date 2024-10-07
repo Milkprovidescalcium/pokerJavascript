@@ -197,7 +197,15 @@ function setCardImage(card,which) {
 function setCardImageDeal(card,which) { //*I KNOW IT'S BAD PRACTICE SHUT UP
     console.log(card)
     console.log(which)
+
     let cardDiv = document.getElementById('handCard' + which.toString());
+    cardDiv.style.backgroundImage = `url(${cardImages[card]})`;
+}
+function setOpponentCardImageDeal(card,which,whichOpp) { //*I KNOW IT'S BAD PRACTICE SHUT UP
+    console.log(card)
+    console.log(which)
+    console.log(whichOpp)
+    let cardDiv = document.getElementById('opponent' + whichOpp.toString() + 'Card' + which.toString());
     cardDiv.style.backgroundImage = `url(${cardImages[card]})`;
 }
 
@@ -269,6 +277,38 @@ function dealCards(){
     console.log('hand: ' + hand)
     document.getElementById('hand').innerHTML = hand
 
+    // console.log('cards dealt ' + cardsDealt)
+}
+let opponentHand1 = [];
+let opponentHand2 = [];
+let opponentHand3= [];
+ 
+let opponentDealing = 1;
+let opponentDealt = false;
+
+let whichOpponent = 1;
+let whichOpponentCard = 1;
+function opponentDeal(){
+        for(let i = 0; i < 2; i++){
+            let cardDrawn = generateCard()
+            if(whichOpponent === 1){
+                opponentHand1.push(cardDrawn)
+                // console.log('opponentHand1: ' + opponentHand1)
+            }else if(whichOpponent === 2){
+                opponentHand2.push(cardDrawn)
+                // console.log('opponentHand2: ' + opponentHand2)
+            }else if(whichOpponent === 3){
+                opponentHand3.push(cardDrawn)
+                // console.log('opponentHand3: ' + opponentHand3)
+            }
+
+            let whichCard = i +1
+            
+            // setCardImageDeal(cardDrawn,whichCard)
+            setOpponentCardImageDeal(cardDrawn,whichCard,whichOpponent)
+        }
+        whichOpponent++;
+        console.log(whichOpponent)
     // console.log('cards dealt ' + cardsDealt)
 }
 
@@ -470,8 +510,6 @@ function checkHand(){
     pot = 0
     potDiv.innerHTML = pot
     handDiv.innerHTML = balance
-
-   
 }
 
 

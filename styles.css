@@ -126,6 +126,36 @@ body{
     display:flex;
     flex-direction: row
 }
+.opponent-cards-container{
+    position:relative;
+    aspect-ratio: 3/2;
+    height: 850px;
+    border: 5px solid red;
+    display: flex;
+    justify-content: center;
+}
+.opponent-1-images{
+    position: absolute;
+    bottom: 0;         
+    left: 0;    
+    padding: 10px;
+}
+.opponent-2-images{
+    position: absolute;
+    top: 0;         
+    left: 0;    
+    padding: 10px;
+}
+.opponent-3-images{
+    position: absolute;
+    top: 0;         
+    right: 0;   
+    padding: 10px;
+}
+.hand{
+    display: flex;
+    flex-direction: row
+}
 
 
 

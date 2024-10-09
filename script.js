@@ -150,38 +150,53 @@ function generateRandNums(max){
 // Get all keys from the object
 
 
-let card = ""
-function generateCard(){
-//check if cards have been dealt
-    const key = Object.keys(deck);
-    let randomCard = (generateRandNums(key.length)) + 1
-    let randomSuite = suites[generateRandNums(suites.length)]
-    // console.log('suite: ' + randomSuite)
-    // console.log('card ' + randomCard)
-    card = randomCard + "_" + randomSuite
-    // let card = randomCard + "_" + randomSuite
 
-    if(cardsDealt.length <52){
-        while (cardsDealt.includes(card)){ //*SOLUTON: run a loop that continues generating random cards as long as the cardsDealt array includes the random card
-            randomCard = (generateRandNums(key.length)) + 1
-            randomSuite = suites[generateRandNums(suites.length)]
-            card = randomCard + "_" + randomSuite
-        }
-        cardsDealt.push(card)
-       
-        communityVals.push(randomCard)
-        communitySuites.push(randomSuite)
-        return card;
+function generateCardForHand(whichHand) {//by default, the hand that is drawin is a community card
+    let randomCard, randomSuite, card;
+    
+    do { //generate random card here
+        randomCard = generateRandNums(values.length) + 1;
+        randomSuite = suites[generateRandNums(suites.length)];
+        card = randomCard + "_" + randomSuite;
+    } while (cardsDealt.includes(card));
 
+    cardsDealt.push(card);
 
-    }else{
-        console.log('all cards dealt bozo')
+    switch (whichHand) {
+        case 'community':
+            communityVals.push(randomCard);
+            communitySuites.push(randomSuite);
+            break;
+            
+        case 'player':
+            handVals.push(randomCard);
+            handSuites.push(randomSuite);
+            break;
+            
+        case 'opp1':
+            oppHandVals1.push(randomCard);
+            oppHandSuites1.push(randomSuite);
+            break;
+            
+        case 'opp2':
+            oppHandVals2.push(randomCard);
+            oppHandSuites2.push(randomSuite);
+            break;
+            
+        case 'opp3':
+            oppHandVals3.push(randomCard);
+            oppHandSuites3.push(randomSuite);
+            break;
+            
+        default:
+            alert('Invalid hand type');
     }
 
-    // console.log('card: ' + card)
-    // console.log(cardsDealt)
+    return card;
+}
 
-//if the cardsDealt array includes the card, generate new card
+function generateHandCard(){
+
 }
 
 
@@ -195,16 +210,16 @@ function setCardImage(card,which) {
     cardDiv.style.backgroundImage = `url(${cardImages[card]})`;
 }
 function setCardImageDeal(card,which) { //*I KNOW IT'S BAD PRACTICE SHUT UP
-    console.log(card)
-    console.log(which)
+    // console.log(card)
+    // console.log(which)
 
     let cardDiv = document.getElementById('handCard' + which.toString());
     cardDiv.style.backgroundImage = `url(${cardImages[card]})`;
 }
 function setOpponentCardImageDeal(card,which,whichOpp) { //*I KNOW IT'S BAD PRACTICE SHUT UP
-    console.log(card)
-    console.log(which)
-    console.log(whichOpp)
+    // console.log(card)
+    // console.log(which)
+    // console.log(whichOpp)
     let cardDiv = document.getElementById('opponent' + whichOpp.toString() + 'Card' + which.toString());
     cardDiv.style.backgroundImage = `url(${cardImages[card]})`;
 }
@@ -220,68 +235,47 @@ function flipCommunityCards(){
     //*function to display the random numbers, this function calls the generateNums() function
     switch(stage){
         case 1:
-            console.log('flop') //draw three random cards
-            for(let i = 0; i < 3; i++){ 
-
-                cardDrawn = generateCard()
-                communityCardsArray.push(cardDrawn) //add the drawn card to the community cards
-                let whichCard = i +1
-                setCardImage(cardDrawn,whichCard)
-                // let temp = cardDrawn.split('_')[1]
-                // console.log(temp)
+            case 1: // Flop
+            for (let i = 0; i < 3; i++) {
+                const cardDrawn = generateCardForHand('community'); //generates a card for the community hand
+                setCardImage(cardDrawn, i + 1);
             }
-            document.getElementById('communityCards').innerHTML = communityCardsArray
-            // console.log(communityCardsArray)
+            break;
+        case 3: // Turn
+            const turnCard = generateCardForHand('community');
+            setCardImage(turnCard, 4);
         break;
-        case 2:
-            console.log('turn')
-
-            cardDrawn = generateCard()
-            communityCardsArray.push(cardDrawn) //add the drawn card to the community cards
-      
-            document.getElementById('communityCards').innerHTML = communityCardsArray
-            // console.log(communityCardsArray)
-            setCardImage(cardDrawn,4)
-        break;
-        case 3:
-            console.log('river')
-            cardDrawn = generateCard()
-            communityCardsArray.push(cardDrawn) //add the drawn card to the community cards
-       
-            
-            document.getElementById('communityCards').innerHTML = communityCardsArray
-            // console.log(communityCardsArray)
-            setCardImage(cardDrawn,5)
+        case 5: // River
+            const riverCard = generateCardForHand('community');
+            setCardImage(riverCard, 5);
         break;
         default:
             console.log('bruh error')
-        break;
+
     }
     stage++;
 }
 
 let hand = []
 let dealt = false;
-function dealCards(){
-    if(!dealt){
-        for(let i = 0; i < 2; i++){
-            let cardDrawn = generateCard()
-            hand.push(cardDrawn)
-            let whichCard = i +1
-            setCardImageDeal(cardDrawn,whichCard)
-            dealt = true;
+function dealPlayerHand() {
+    if (handVals.length === 0) {
+        for (let i = 0; i < 2; i++) {
+            let cardDrawn = generateCardForHand('player'); // false means it's not a community card
+            setCardImageDeal(cardDrawn, i + 1);
         }
     }
-
-
-    console.log('hand: ' + hand)
-    document.getElementById('hand').innerHTML = hand
-
-    // console.log('cards dealt ' + cardsDealt)
 }
 let opponentHand1 = [];
 let opponentHand2 = [];
 let opponentHand3= [];
+
+let oppHandVals1 = [];
+let oppHandVals2 = [];
+let oppHandVals3 = [];
+let oppHandSuites1 = [];
+let oppHandSuites2 = [];
+let oppHandSuites3 = [];
  
 let opponentDealing = 1;
 let opponentDealt = false;
@@ -289,16 +283,22 @@ let opponentDealt = false;
 let whichOpponent = 1;
 let whichOpponentCard = 1;
 function opponentDeal(){
+    let cardDrawn;
         for(let i = 0; i < 2; i++){
-            let cardDrawn = generateCard()
+
             if(whichOpponent === 1){
-                opponentHand1.push(cardDrawn)
+
+                cardDrawn = generateCardForHand('opp1')
                 // console.log('opponentHand1: ' + opponentHand1)
             }else if(whichOpponent === 2){
-                opponentHand2.push(cardDrawn)
+
+                cardDrawn = generateCardForHand('opp2')
+
                 // console.log('opponentHand2: ' + opponentHand2)
             }else if(whichOpponent === 3){
-                opponentHand3.push(cardDrawn)
+
+                cardDrawn = generateCardForHand('opp3')
+
                 // console.log('opponentHand3: ' + opponentHand3)
             }
 
@@ -308,7 +308,7 @@ function opponentDeal(){
             setOpponentCardImageDeal(cardDrawn,whichCard,whichOpponent)
         }
         whichOpponent++;
-        console.log(whichOpponent)
+        // console.log(whichOpponent)
     // console.log('cards dealt ' + cardsDealt)
 }
 
@@ -323,25 +323,27 @@ function bet(){
     potDiv.innerHTML = pot
     handDiv.innerHTML = balance
 }
+function combineArrays(handVals, communityVals, handSuites, communitySuites) {
+    // Combine the passed-in value and suit arrays
+    const wholeHandVals = handVals.concat(communityVals);
+    const wholeHandSuites = handSuites.concat(communitySuites);
 
-function combineArrays(){
-    wholeHandVals = []; 
-    wholeHandSuites = []; 
-
-    wholeHandVals = wholeHandVals.concat(handVals, communityVals);
-    wholeHandSuites = wholeHandSuites.concat(handSuites, communitySuites);
-
-    //this function sorts the array numerically
+    // Sort the combined wholeHandVals array numerically
     wholeHandVals.sort(function(a, b) {
         return a - b;
     });
 
-    // console.log('whole hand values: ' + wholeHandVals);
-    // console.log('whole hand suites: ' + wholeHandSuites);
+    console.log(handVals)
+    console.log('whole hand values: ' + wholeHandVals);
+    console.log('whole hand suites: ' + wholeHandSuites);
+    return{
+        wholeHandVals,
+        wholeHandSuites
+    }
 }
 // let tempArray = ["diamonds", "diamonds", "hearts","hearts","hearts","hearts","spades"]
 
-function checkFlush(){
+function checkFlush(wholeHandSuites){
     //*if suite appears 5 times in whole hand, return true
     for(let index = 0; index < suites.length; index++){ //checking for every possible suite if is contained in the array of suites in hand
         let searchString = suites[index];
@@ -365,20 +367,20 @@ function checkFlush(){
 let startingIndex = 0;
 let difference = -1;
 // let tempArray = [2,3,3,4,5,6,7]
-function checkStraight(){
+function checkStraight(hand){
 
 
 //*checking through all the values in the array, comapring them to the next value above it, by the difference variable
-    for(let index = 0; index < wholeHandVals.length; index++){
+    for(let index = 0; index < hand.length; index++){
         difference = -1; 
 
-        for(let i = 1; i < wholeHandVals.length - index; i++){
-            startingIndex = wholeHandVals[0]
-            if(startingIndex - wholeHandVals[index + i] === difference){
+        for(let i = 1; i < hand.length - index; i++){
+            startingIndex = hand[0]
+            if(startingIndex - hand[index + i] === difference){
                 difference--;
                 // console.log('passed')
             }else{
-                startingIndex = wholeHandVals[1]
+                startingIndex = hand[1]
                 break
             }
         }
@@ -391,7 +393,7 @@ function checkStraight(){
     return false;
 }
 
-function checkPair(){
+function checkPair(wholeHandVals){
     let pairNum = 0;
     let countedPairs = new Set(); //*sets in javascript are objects that store UNIQUE values, if you try to give a duplicate value, the duplicate value will be ignored
 
@@ -418,7 +420,7 @@ function checkPair(){
     return pairNum;
 
 }
-function checkThree(){
+function checkThree(wholeHandVals){
 
     for(let index = 0; index < values.length; index++){ //checking for every possible suite if is contained in the array of suites in hand
         let searchThree = values[index];
@@ -438,7 +440,7 @@ function checkThree(){
     return false;
 
 }
-function checkFour(){
+function checkFour(wholeHandVals){
     for(let index = 0; index < values.length; index++){ //checking for every possible suite if is contained in the array of suites in hand
         let searchFour = values[index];
         let fourCount = 0;  
@@ -456,70 +458,100 @@ function checkFour(){
     // console.log('not a four :(')
     return false;
 }
-function checkFull(){
+function checkFull(wholeHandVals){
     //* if checkPair, and checkThree both return true, return true
-    if(checkThree() && checkPair()){
-        // console.log('is a full!')
-        return true;
-    }else{
-        // console.log('not a full :(')
-        return false;
+    if (checkThree(wholeHandVals) && checkPair(wholeHandVals) > 0) {
+        return true; // Full house found
+    } else {
+        return false; // Not a full house
     }
+    
 }
 
 let resultDiv = document.getElementById('result')
 let resultText = ''
 let winResultDiv = document.getElementById('winResult')
-function checkHand(){
-    combineArrays()
 
-    checkPair()
-    checkThree()
-    checkFour()
-    checkFlush()
-    checkFull()
-    checkStraight()
-    if(checkStraight()){
-        // console.log('straight!')
-        resultText = 'straight'
-    }else if(checkFour()){
-        // console.log('four of a kind!')
-        resultText = 'four of a kind!'
-    }else if(checkFull()){
-        // console.log('full house!')
-        resultText = 'full house!'
-    }else if(checkFlush()){
-        // console.log('flush!')
-        resultText = 'flush!'
-    }else if(checkThree()){
-        // console.log('three of a kind!')
-        resultText = 'three of a kind!'
-    }else if(checkPair()){
-        // console.log(checkPair() + ' pairs!')
-        resultText = checkPair() + ' pairs!'
-    }else{
-        // console.log('wow you have nothing!')
-        resultText = 'wow you have nothing!'
+let handValue = 0; //if you're hand value is the highest you win!
+function checkPlayerHand() {
+    // Generate the combined hand of player and community cards
+    const { wholeHandVals, wholeHandSuites } = combineArrays(handVals, communityVals, handSuites, communitySuites);
+    // Check for different hand types
+    let resultText = '';
+    if (checkStraight(wholeHandVals)) {
+        resultText = 'straight';
+        handValue = 6;
+    } else if (checkFour(wholeHandVals)) {
+        resultText = 'four of a kind!';
+        handValue = 5;
+    } else if (checkFull(wholeHandVals)) {
+        resultText = 'full house!';
+        handValue = 4;
+    } else if (checkFlush(wholeHandSuites)) {
+        resultText = 'flush!';
+        handValue = 3;
+    } else if (checkThree(wholeHandVals)) {
+        resultText = 'three of a kind!';
+        handValue = 2;
+    } else if (checkPair(wholeHandVals) > 0) {
+        resultText = checkPair(wholeHandVals) + ' pairs!';
+        handValue = 1;
+    } else {
+        resultText = 'wow you have nothing!';
+        handValue = 0;
     }
 
-    // console.log('you win the ' + potDiv.innerHTML + ' pot')
-    resultDiv.innerHTML = resultText
+    // Display the result and update the pot and balance
+    resultDiv.innerHTML = resultText;
+    winResultDiv.innerHTML = `The value of your hand is ${handValue}`;
+    balance += pot;
+    pot = 0;
+    potDiv.innerHTML = pot;
+    handDiv.innerHTML = balance;
+}
+function checkOppHand(){
+    console.log(oppHandVals1)
 
-    winResultDiv.innerHTML =  'you win the pot of ' + potDiv.innerHTML
-    balance += pot
-    pot = 0
-    potDiv.innerHTML = pot
-    handDiv.innerHTML = balance
+    const { wholeHandVals, wholeHandSuites } = combineArrays(oppHandVals1, communityVals, oppHandSuites1, communitySuites);
+    // Check for different hand types
+    let resultText = '';
+    if (checkStraight(wholeHandVals)) {
+        resultText = 'straight';
+        handValue = 6;
+    } else if (checkFour(wholeHandVals)) {
+        resultText = 'four of a kind!';
+        handValue = 5;
+    } else if (checkFull(wholeHandVals)) {
+        resultText = 'full house!';
+        handValue = 4;
+    } else if (checkFlush(wholeHandSuites)) {
+        resultText = 'flush!';
+        handValue = 3;
+    } else if (checkThree(wholeHandSuites)) {
+        resultText = 'three of a kind!';
+        handValue = 2;
+    } else if (checkPair(wholeHandVals) > 0) {
+        resultText = checkPair(wholeHandVals) + ' pairs!';
+        handValue = 1;
+    } else {
+        resultText = 'wow they have nothing!';
+        handValue = 0;
+    }
+    resultDiv.innerHTML = resultText;
+    winResultDiv.innerHTML = `The value of their hand is ${handValue}`;
 }
 
-
 //TODO: add bad bots, like the bots go all in every time
+//TODO: add an equation to evaluate the 'value' of each hand
 
-
-//Oct-1-2024---------
+//Oct-1-2024---------DONE
 //!PROBLEM, when I'm trying to push the seperate values and suites to the wholeHand array
 //!i'm calling the generateCard function AGAIN, which causes a new value and array to be generated
 //*SOLUTION: split the existing card into two parts, and push those parts to the respective arrays
 //!PROBLEM, values appear twice in the console log, uhh why?
 //*SOLUTION: you dummy! you were pushing the values to the array twice! You were already pushing them in the generateCards() function, and you pushed them again when drawing and flipping! How silly
 
+//Oct-8-2024-------DONE
+//!PROBLEM, the 'handvals' arent actually hand vals. They're just an extension of the community hand
+//*SOLUTION, make handVals a real thing? Push the items to handVals and then merge them (for real this time)
+//*SOLUTION: handle all the pushing array sorting stuff in the generateCard function

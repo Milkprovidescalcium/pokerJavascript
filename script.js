@@ -30,6 +30,8 @@ let stage = 1;
 //*royal flush
 
 
+
+
 const cardImages = {
     'BACK': 'light/BACK.png',
     //CLUBS
@@ -159,9 +161,7 @@ function generateCardForHand(whichHand) {//by default, the hand that is drawin i
         randomSuite = suites[generateRandNums(suites.length)];
         card = randomCard + "_" + randomSuite;
     } while (cardsDealt.includes(card));
-
     cardsDealt.push(card);
-
     switch (whichHand) {
         case 'community':
             communityVals.push(randomCard);
@@ -189,7 +189,7 @@ function generateCardForHand(whichHand) {//by default, the hand that is drawin i
             break;
             
         default:
-            alert('Invalid hand type');
+            alert('INVALID HAND!!!!!!');
     }
 
     return card;
@@ -282,6 +282,10 @@ let opponentDealt = false;
 
 let whichOpponent = 1;
 let whichOpponentCard = 1;
+
+let whichOppHandVals = oppHandVals1
+let whichOppHandSuites = oppHandSuites1
+
 function opponentDeal(){
     let cardDrawn;
         for(let i = 0; i < 2; i++){
@@ -333,9 +337,9 @@ function combineArrays(handVals, communityVals, handSuites, communitySuites) {
         return a - b;
     });
 
-    console.log(handVals)
-    console.log('whole hand values: ' + wholeHandVals);
-    console.log('whole hand suites: ' + wholeHandSuites);
+    // console.log(handVals)
+    // console.log('whole hand values: ' + wholeHandVals);
+    // console.log('whole hand suites: ' + wholeHandSuites);
     return{
         wholeHandVals,
         wholeHandSuites
@@ -509,10 +513,15 @@ function checkPlayerHand() {
     potDiv.innerHTML = pot;
     handDiv.innerHTML = balance;
 }
-function checkOppHand(){
-    console.log(oppHandVals1)
 
-    const { wholeHandVals, wholeHandSuites } = combineArrays(oppHandVals1, communityVals, oppHandSuites1, communitySuites);
+let oppHandValNum = 0;
+
+function checkOppHand(){
+    console.log(whichOppHandVals)
+    console.log(whichOppHandSuites)
+
+
+    const { wholeHandVals, wholeHandSuites } = combineArrays(whichOppHandVals, communityVals, whichOppHandSuites, communitySuites);
     // Check for different hand types
     let resultText = '';
     if (checkStraight(wholeHandVals)) {
@@ -537,6 +546,20 @@ function checkOppHand(){
         resultText = 'wow they have nothing!';
         handValue = 0;
     }
+
+    oppHandValNum++
+
+    if(oppHandValNum === 1){
+        whichOppHandVals = oppHandVals2 
+        whichOppHandSuites = oppHandSuites2
+    }else if(oppHandValNum === 2){
+        whichOppHandVals = oppHandVals3 
+        whichOppHandSuites = oppHandSuites3
+    }else{
+        console.log('No opps left (opper stopper)')
+    }
+
+
     resultDiv.innerHTML = resultText;
     winResultDiv.innerHTML = `The value of their hand is ${handValue}`;
 }
@@ -555,3 +578,7 @@ function checkOppHand(){
 //!PROBLEM, the 'handvals' arent actually hand vals. They're just an extension of the community hand
 //*SOLUTION, make handVals a real thing? Push the items to handVals and then merge them (for real this time)
 //*SOLUTION: handle all the pushing array sorting stuff in the generateCard function
+
+//Oct-9-2024------
+//!PROBLEM, I dont know how do evaluate all the opponent hands!
+//*SOLUTIION? Try and

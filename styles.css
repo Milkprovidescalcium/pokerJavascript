@@ -28,9 +28,11 @@ body{
 .board{
 
     aspect-ratio: 3/2;
-    height:500px;
+    height:600px;
     border: 5px solid red;
     margin:20px;
+
+    background-image:url("TableTexture.jpg");
 }
 .board-content-container{
     border: 5px solid red;
@@ -100,6 +102,8 @@ body{
     aspect-ratio: 3/2;
     height: 850px;
     margin-bottom: 80px; /* Space for the hand and results */
+
+
 }
 .card{
     box-sizing: border-box;

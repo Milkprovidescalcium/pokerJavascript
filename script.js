@@ -476,7 +476,12 @@ let resultDiv = document.getElementById('result')
 let resultText = ''
 let winResultDiv = document.getElementById('winResult')
 
-let handValue = 0; //if you're hand value is the highest you win!
+let playerHandValue = 0;
+let opp1HandValue = 0;
+let opp2HandValue = 0;
+let opp3HandValue = 0;
+
+let highestHandValue = 0;//if handValue is greater than highestHand value, you win!
 function checkPlayerHand() {
     // Generate the combined hand of player and community cards
     const { wholeHandVals, wholeHandSuites } = combineArrays(handVals, communityVals, handSuites, communitySuites);
@@ -484,30 +489,30 @@ function checkPlayerHand() {
     let resultText = '';
     if (checkStraight(wholeHandVals)) {
         resultText = 'straight';
-        handValue = 6;
+        playerHandValue  = 6;
     } else if (checkFour(wholeHandVals)) {
         resultText = 'four of a kind!';
-        handValue = 5;
+        playerHandValue  = 5;
     } else if (checkFull(wholeHandVals)) {
         resultText = 'full house!';
-        handValue = 4;
+        playerHandValue  = 4;
     } else if (checkFlush(wholeHandSuites)) {
         resultText = 'flush!';
-        handValue = 3;
+        playerHandValue  = 3;
     } else if (checkThree(wholeHandVals)) {
         resultText = 'three of a kind!';
-        handValue = 2;
+        playerHandValue  = 2;
     } else if (checkPair(wholeHandVals) > 0) {
         resultText = checkPair(wholeHandVals) + ' pairs!';
-        handValue = 1;
+        playerHandValue  = 1;
     } else {
         resultText = 'wow you have nothing!';
-        handValue = 0;
+        playerHandValue  = 0;
     }
 
     // Display the result and update the pot and balance
     resultDiv.innerHTML = resultText;
-    winResultDiv.innerHTML = `The value of your hand is ${handValue}`;
+    winResultDiv.innerHTML = `The value of your hand is ${playerHandValue}`;
     balance += pot;
     pot = 0;
     potDiv.innerHTML = pot;
@@ -547,6 +552,14 @@ function checkOppHand(){
         handValue = 0;
     }
 
+    if (oppHandValNum === 1) {
+        opp1HandValue = handValue;
+    } else if (oppHandValNum === 2) {
+        opp2HandValue = handValue;
+    } else if (oppHandValNum === 3) {
+        opp3HandValue = handValue;
+    }
+
     oppHandValNum++
 
     if(oppHandValNum === 1){
@@ -561,7 +574,27 @@ function checkOppHand(){
 
 
     resultDiv.innerHTML = resultText;
-    winResultDiv.innerHTML = `The value of their hand is ${handValue}`;
+    winResultDiv.innerHTML =`The value of opponent ${oppHandValNum}'s hand is ${handValue}`;
+}
+
+function checkWhoWins(){
+    let winner = 'Player';
+    let highestHandValue = playerHandValue;
+
+    if (opp1HandValue > highestHandValue) {
+        winner = 'Opponent 1';
+        highestHandValue = opp1HandValue;
+    }
+    if (opp2HandValue > highestHandValue) {
+        winner = 'Opponent 2';
+        highestHandValue = opp2HandValue;
+    }
+    if (opp3HandValue > highestHandValue) {
+        winner = 'Opponent 3';
+        highestHandValue = opp3HandValue;
+    }
+
+    winResultDiv.innerHTML = `${winner} wins with a hand value of ${highestHandValue}`;
 }
 
 //TODO: add bad bots, like the bots go all in every time

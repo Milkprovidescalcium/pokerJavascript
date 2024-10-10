@@ -31,8 +31,8 @@ body{
     height:600px;
     border: 5px solid red;
     margin:20px;
-
-    background-image:url("TableTexture.jpg");
+/* 
+    background-image:url("TableTexture.jpg"); */
 }
 .board-content-container{
     border: 5px solid red;
@@ -159,6 +159,10 @@ body{
 .hand{
     display: flex;
     flex-direction: row
+}
+
+.raise-container{
+    display:none;
 }
 
 

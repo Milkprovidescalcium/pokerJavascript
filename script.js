@@ -248,6 +248,15 @@ function flipCommunityCards(){
         case 5: // River
             const riverCard = generateCardForHand('community');
             setCardImage(riverCard, 5);
+
+            checkPlayerHand()
+
+            checkOppHand()
+            checkOppHand()
+            checkOppHand()
+
+
+            checkWhoWins()
         break;
         default:
             console.log('bruh error')
@@ -266,6 +275,8 @@ function dealPlayerHand() {
         }
     }
 }
+dealPlayerHand()
+
 let opponentHand1 = [];
 let opponentHand2 = [];
 let opponentHand3= [];
@@ -315,18 +326,15 @@ function opponentDeal(){
         // console.log(whichOpponent)
     // console.log('cards dealt ' + cardsDealt)
 }
+opponentDeal()
+opponentDeal()
+opponentDeal()
 
-let pot = 0;
-let howMuch = 10;
+function revealOpponentHands(){
+    setOpponentCardImageDeal(cardDrawn,whichCard,whichOpponent)
 
-let potDiv = document.getElementById('pot')
-let handDiv = document.getElementById('balance') 
-function bet(){
-    balance -=howMuch
-    pot += howMuch
-    potDiv.innerHTML = pot
-    handDiv.innerHTML = balance
 }
+
 function combineArrays(handVals, communityVals, handSuites, communitySuites) {
     // Combine the passed-in value and suit arrays
     const wholeHandVals = handVals.concat(communityVals);
@@ -538,7 +546,7 @@ function checkOppHand(){
     } else if (checkFull(wholeHandVals)) {
         resultText = 'full house!';
         handValue = 4;
-    } else if (checkFlush(wholeHandSuites)) {
+    } else if (checkFlush(wholeHandSuites)) { 
         resultText = 'flush!';
         handValue = 3;
     } else if (checkThree(wholeHandSuites)) {
@@ -574,8 +582,9 @@ function checkOppHand(){
 
 
     resultDiv.innerHTML = resultText;
-    winResultDiv.innerHTML =`The value of opponent ${oppHandValNum}'s hand is ${handValue}`;
+    // winResultDiv.innerHTML =`The value of opponent ${oppHandValNum}'s hand is ${handValue}`;
 }
+
 
 function checkWhoWins(){
     let winner = 'Player';
@@ -595,6 +604,48 @@ function checkWhoWins(){
     }
 
     winResultDiv.innerHTML = `${winner} wins with a hand value of ${highestHandValue}`;
+}
+
+function fold(){
+    console.log('folded')
+}
+function check(){
+    console.log('checked')
+}
+const raiseContainerDiv = document.getElementById('raiseContainer')
+let raiseState = 0;
+function raise(){
+    console.log('called')
+
+    if(raiseState===0){
+        raiseState++
+        raiseContainerDiv.style.display = 'block'
+    }else{
+        raiseState = 0;
+        raiseContainerDiv.style.display = 'none'
+    }
+
+}
+let pot = 0;
+let howMuch = 10;
+let submitRaiseButtonDiv = document.getElementById('submitRaiseButton')
+let howMuchRaiseDiv = document.getElementById('howMuchRaise')
+
+function submitRaise(){
+    pot += parseInt(howMuchRaiseDiv.value)
+    potDiv.innerHTML = pot
+}
+
+
+
+
+let potDiv = document.getElementById('pot')
+let handDiv = document.getElementById('balance') 
+function bet(){
+    balance -=howMuch
+    pot += howMuch
+    potDiv.innerHTML = pot
+    handDiv.innerHTML = balance
 }
 
 //TODO: add bad bots, like the bots go all in every time

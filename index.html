@@ -107,6 +107,15 @@
                 <button onclick="opponentDeal()"type = "button" id = "opponentDeal">opponentDeal</button>
                 <button onclick="checkOppHand()"type = "button" id = "checkOppHand">checkOppHand</button>
                 <button onclick="checkWhoWins()"type = "button" id = "checkWhoWins">checkWhoWins</button>
+                <button onclick="fold()"type = "button" id = "foldButton" class = 'fold-button'>fold</button>
+                <button onclick="check()"type = "button" id = "checkButton" class = 'check-button'>check</button>
+                
+                <button onclick="raise()"type = "button" id = "raiseButton" class = 'raise-button'>raise</button>
+                <div id = "raiseContainer" class = 'raise-container'>
+                    <input onclick="howMuchRaise()"type = "text" id = "howMuchRaise" class = 'how-much-raise'>how much?</input>
+                    <button onclick="submitRaise()"type = "button" id = "submitRaiseButton" class = 'submit-raise-button'>submit</button>
+                </div>
+             
             </div>
         </div>
     </div>

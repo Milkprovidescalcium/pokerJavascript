@@ -249,13 +249,13 @@ function flipCommunityCards(){
             const riverCard = generateCardForHand('community');
             setCardImage(riverCard, 5);
 
+
+
+            checkOppHand()
+            checkOppHand()
+            checkOppHand()
+
             checkPlayerHand()
-
-            checkOppHand()
-            checkOppHand()
-            checkOppHand()
-
-
             checkWhoWins()
         break;
         default:
@@ -491,30 +491,32 @@ let opp3HandValue = 0;
 
 let highestHandValue = 0;//if handValue is greater than highestHand value, you win!
 function checkPlayerHand() {
+
+    
     // Generate the combined hand of player and community cards
-    const { wholeHandVals, wholeHandSuites } = combineArrays(handVals, communityVals, handSuites, communitySuites);
+    let { wholeHandVals, wholeHandSuites } = combineArrays(handVals, communityVals, handSuites, communitySuites);
     // Check for different hand types
     let resultText = '';
     if (checkStraight(wholeHandVals)) {
-        resultText = 'straight';
+        resultText = 'player straight';
         playerHandValue  = 6;
     } else if (checkFour(wholeHandVals)) {
-        resultText = 'four of a kind!';
+        resultText = 'player four of a kind!';
         playerHandValue  = 5;
     } else if (checkFull(wholeHandVals)) {
-        resultText = 'full house!';
+        resultText = 'player full house!';
         playerHandValue  = 4;
     } else if (checkFlush(wholeHandSuites)) {
-        resultText = 'flush!';
+        resultText = 'player flush!';
         playerHandValue  = 3;
     } else if (checkThree(wholeHandVals)) {
-        resultText = 'three of a kind!';
+        resultText = 'player three of a kind!';
         playerHandValue  = 2;
-    } else if (checkPair(wholeHandVals) > 0) {
-        resultText = checkPair(wholeHandVals) + ' pairs!';
+    } else if (checkPair(wholeHandVals)) {
+        resultText = checkPair(wholeHandVals) + 'player pairs!';
         playerHandValue  = 1;
     } else {
-        resultText = 'wow you have nothing!';
+        resultText = 'player wow you have nothing!';
         playerHandValue  = 0;
     }
 
@@ -529,12 +531,21 @@ function checkPlayerHand() {
 
 let oppHandValNum = 0;
 
+
+let opp1ResultDiv = document.getElementById('opp1Result');
+let opp2ResultDiv = document.getElementById('opp2Result');
+let opp3ResultDiv = document.getElementById('opp3Result');
+
+
 function checkOppHand(){
-    console.log(whichOppHandVals)
-    console.log(whichOppHandSuites)
 
+    let handValue = 0;
 
-    const { wholeHandVals, wholeHandSuites } = combineArrays(whichOppHandVals, communityVals, whichOppHandSuites, communitySuites);
+    let { wholeHandVals, wholeHandSuites } = combineArrays(whichOppHandVals, communityVals, whichOppHandSuites, communitySuites);
+    
+    
+    console.log(wholeHandVals)
+    console.log(wholeHandSuites)
     // Check for different hand types
     let resultText = '';
     if (checkStraight(wholeHandVals)) {
@@ -552,7 +563,7 @@ function checkOppHand(){
     } else if (checkThree(wholeHandSuites)) {
         resultText = 'three of a kind!';
         handValue = 2;
-    } else if (checkPair(wholeHandVals) > 0) {
+    } else if (checkPair(wholeHandVals)) {
         resultText = checkPair(wholeHandVals) + ' pairs!';
         handValue = 1;
     } else {
@@ -568,20 +579,37 @@ function checkOppHand(){
         opp3HandValue = handValue;
     }
 
+    console.log(opp1HandValue)
+    console.log(opp2HandValue)
+    console.log(opp3HandValue)
+
     oppHandValNum++
 
-    if(oppHandValNum === 1){
-        whichOppHandVals = oppHandVals2 
-        whichOppHandSuites = oppHandSuites2
+    if (oppHandValNum === 1) {
+        opp1ResultDiv.innerHTML = resultText;
+    } else if (oppHandValNum === 2) {
+        opp2ResultDiv.innerHTML = resultText;
+    } else if (oppHandValNum === 3) {
+        opp3ResultDiv.innerHTML = resultText;
+    }
+
+    if(oppHandValNum === 1){ //what the fuck does opphandvalnum mean
+        whichOppHandVals = oppHandVals1
+        whichOppHandSuites = oppHandSuites1
     }else if(oppHandValNum === 2){
+        whichOppHandVals = oppHandVals2
+        whichOppHandSuites = oppHandSuites2
+    }else if(oppHandValNum===3){
         whichOppHandVals = oppHandVals3 
         whichOppHandSuites = oppHandSuites3
-    }else{
+    }
+    else{
         console.log('No opps left (opper stopper)')
     }
 
 
     resultDiv.innerHTML = resultText;
+    winResultDiv.innerHTML = `The value of your hand is ${playerHandValue}`;
     // winResultDiv.innerHTML =`The value of opponent ${oppHandValNum}'s hand is ${handValue}`;
 }
 
@@ -593,17 +621,20 @@ function checkWhoWins(){
     if (opp1HandValue > highestHandValue) {
         winner = 'Opponent 1';
         highestHandValue = opp1HandValue;
+
     }
     if (opp2HandValue > highestHandValue) {
         winner = 'Opponent 2';
         highestHandValue = opp2HandValue;
+
     }
     if (opp3HandValue > highestHandValue) {
         winner = 'Opponent 3';
         highestHandValue = opp3HandValue;
+
     }
 
-    winResultDiv.innerHTML = `${winner} wins with a hand value of ${highestHandValue}`;
+    winResultDiv.innerHTML = `${winner} wins `
 }
 
 function fold(){

@@ -234,17 +234,43 @@ function flipCommunityCards(){
     // console.log(cardsDealt)
     //*function to display the random numbers, this function calls the generateNums() function
     switch(stage){
-        case 1:
-            case 1: // Flop
+        case 0:
+            console.log('preflop bet')
+            for (let i = 0; i < 3; i++) {
+                opponentDecision(i+1)
+            }
+            break
+        case 1:// Flop
+
             for (let i = 0; i < 3; i++) {
                 const cardDrawn = generateCardForHand('community'); //generates a card for the community hand
                 setCardImage(cardDrawn, i + 1);
+
             }
             break;
+        case 2:
+
+            console.log('flop bet')
+            for (let i = 0; i < 3; i++) {
+                opponentDecision(i+1) //call opponent decision three times, each time with a different opponent
+            }
+
+            break;
+            
         case 3: // Turn
             const turnCard = generateCardForHand('community');
             setCardImage(turnCard, 4);
+
+            console.log('turn')
+
         break;
+
+        case 4:
+            console.log('turn bet')
+            for (let i = 0; i < 3; i++) {
+                opponentDecision(i+1)
+            }
+            break;
         case 5: // River
             const riverCard = generateCardForHand('community');
             setCardImage(riverCard, 5);
@@ -258,6 +284,12 @@ function flipCommunityCards(){
             checkPlayerHand()
             checkWhoWins()
         break;
+        case 6:
+            console.log('river bet')
+            for (let i = 0; i < 3; i++) {
+                opponentDecision(i+1)
+            }
+            break;
         default:
             console.log('bruh error')
 
@@ -405,6 +437,7 @@ function checkStraight(hand){
     return false;
 }
 
+let pairsFound = [];
 function checkPair(wholeHandVals){
     let pairNum = 0;
     let countedPairs = new Set(); //*sets in javascript are objects that store UNIQUE values, if you try to give a duplicate value, the duplicate value will be ignored
@@ -499,22 +532,22 @@ function checkPlayerHand() {
     let resultText = '';
     if (checkStraight(wholeHandVals)) {
         resultText = 'player straight';
-        playerHandValue  = 6;
+        playerHandValue  = 8;
     } else if (checkFour(wholeHandVals)) {
         resultText = 'player four of a kind!';
-        playerHandValue  = 5;
+        playerHandValue  = 7;
     } else if (checkFull(wholeHandVals)) {
         resultText = 'player full house!';
-        playerHandValue  = 4;
+        playerHandValue  = 6;
     } else if (checkFlush(wholeHandSuites)) {
         resultText = 'player flush!';
-        playerHandValue  = 3;
+        playerHandValue  = 5;
     } else if (checkThree(wholeHandVals)) {
         resultText = 'player three of a kind!';
-        playerHandValue  = 2;
+        playerHandValue  = 4;
     } else if (checkPair(wholeHandVals)) {
         resultText = checkPair(wholeHandVals) + 'player pairs!';
-        playerHandValue  = 1;
+        playerHandValue  = checkPair(wholeHandVals);
     } else {
         resultText = 'player wow you have nothing!';
         playerHandValue  = 0;
@@ -550,22 +583,23 @@ function checkOppHand(){
     let resultText = '';
     if (checkStraight(wholeHandVals)) {
         resultText = 'straight';
-        handValue = 6;
+        handValue = 8;
     } else if (checkFour(wholeHandVals)) {
         resultText = 'four of a kind!';
-        handValue = 5;
+        handValue = 7;
     } else if (checkFull(wholeHandVals)) {
         resultText = 'full house!';
-        handValue = 4;
+        handValue = 6;
     } else if (checkFlush(wholeHandSuites)) { 
         resultText = 'flush!';
-        handValue = 3;
+        handValue = 5;
     } else if (checkThree(wholeHandSuites)) {
         resultText = 'three of a kind!';
-        handValue = 2;
+        handValue = 4;
     } else if (checkPair(wholeHandVals)) {
         resultText = checkPair(wholeHandVals) + ' pairs!';
-        handValue = 1;
+        handValue = checkPair(wholeHandVals);
+        console.log(handValue)
     } else {
         resultText = 'wow they have nothing!';
         handValue = 0;
@@ -579,21 +613,34 @@ function checkOppHand(){
         opp3HandValue = handValue;
     }
 
-    console.log(opp1HandValue)
-    console.log(opp2HandValue)
-    console.log(opp3HandValue)
+    // console.log(opp1HandValue)
+    // console.log(opp2HandValue)
+    // console.log(opp3HandValue)
 
     oppHandValNum++
 
-    if (oppHandValNum === 1) {
+    if (opponentFold1 === true) {
+        opp1ResultDiv.innerHTML = 'folded'
+        opp1HandValue = 0
+    }else if(oppHandValNum === 1){
         opp1ResultDiv.innerHTML = resultText;
-    } else if (oppHandValNum === 2) {
+    }
+
+    if (opponentFold2 === true) {
+        opp2ResultDiv.innerHTML = 'folded'
+        opp2HandValue = 0
+    }else if(oppHandValNum === 2){
         opp2ResultDiv.innerHTML = resultText;
-    } else if (oppHandValNum === 3) {
+    }
+
+    if (opponentFold3 === true) {
+        opp3ResultDiv.innerHTML = 'folded'
+        opp3HandValue = 0
+    }else if(oppHandValNum === 3){
         opp3ResultDiv.innerHTML = resultText;
     }
 
-    if(oppHandValNum === 1){ //what the fuck does opphandvalnum mean
+    if(oppHandValNum === 1){ //what the freak does opphandvalnum mean
         whichOppHandVals = oppHandVals1
         whichOppHandSuites = oppHandSuites1
     }else if(oppHandValNum === 2){
@@ -635,6 +682,9 @@ function checkWhoWins(){
     }
 
     winResultDiv.innerHTML = `${winner} wins `
+
+
+
 }
 
 function fold(){
@@ -667,9 +717,6 @@ function submitRaise(){
     potDiv.innerHTML = pot
 }
 
-
-
-
 let potDiv = document.getElementById('pot')
 let handDiv = document.getElementById('balance') 
 function bet(){
@@ -679,8 +726,74 @@ function bet(){
     handDiv.innerHTML = balance
 }
 
+let opponentFold1 = false;
+let opponentFold2 = false;
+let opponentFold3 = false;
+
+
+function opponentDecision(whichOpponent){
+
+    console.log(opponentFold1)
+    console.log(opponentFold2)
+    console.log(opponentFold3)
+
+
+    let randNum = generateRandNums(3) //four possible decisions the bots can make
+    console.log(whichOpponent)
+    // console.log(randNum)
+
+    if(whichOpponent===1 && opponentFold1 === false){
+        if(randNum === 0){
+            console.log(`opponent ${1} folded`)
+            opponentFold1 = true
+        }
+        if(randNum === 1){
+            console.log(`opponent ${1} checked`)
+        }
+        if(randNum === 2){
+            console.log(`opponent ${1} raised`)
+        }
+    }else if(opponentFold1 === true){
+        console.log('opponent 1 has folded')
+    }
+
+    if(whichOpponent===2 && opponentFold2 === false){
+        if(randNum === 0){
+            console.log(`opponent ${2} folded`)
+            opponentFold2 = true
+        }
+        if(randNum === 1){
+            console.log(`opponent ${2} checked`)
+        }
+        if(randNum === 2){
+            console.log(`opponent ${2} raised`)
+        }
+    }else if(opponentFold2 === true){
+        console.log('opponent 2 has folded')
+    }
+
+    if(whichOpponent===3  && opponentFold3 === false){
+        if(randNum === 0){
+            console.log(`opponent ${3} folded`)
+            opponentFold3 = true
+        }
+        if(randNum === 1){
+            console.log(`opponent ${3} checked`)
+        }
+        if(randNum === 2){
+            console.log(`opponent ${3} raised`)
+        }
+    }else if(opponentFold3 === true){
+        console.log('opponent 3 has folded')
+    }
+
+}
+
 //TODO: add bad bots, like the bots go all in every time
 //TODO: add an equation to evaluate the 'value' of each hand
+
+//TODO: Add logic for bot raising and checking
+//TODO: Make the opponent cards be hidden until the last round. Or when they go all in
 
 //Oct-1-2024---------DONE
 //!PROBLEM, when I'm trying to push the seperate values and suites to the wholeHand array

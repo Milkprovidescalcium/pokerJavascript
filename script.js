@@ -152,7 +152,6 @@ function generateRandNums(max){
 // Get all keys from the object
 
 
-
 function generateCardForHand(whichHand) {//by default, the hand that is drawin is a community card
     let randomCard, randomSuite, card;
     
@@ -161,6 +160,7 @@ function generateCardForHand(whichHand) {//by default, the hand that is drawin i
         randomSuite = suites[generateRandNums(suites.length)];
         card = randomCard + "_" + randomSuite;
     } while (cardsDealt.includes(card));
+
     cardsDealt.push(card);
     switch (whichHand) {
         case 'community':
@@ -275,20 +275,21 @@ function flipCommunityCards(){
             const riverCard = generateCardForHand('community');
             setCardImage(riverCard, 5);
 
-
-
-            checkOppHand()
-            checkOppHand()
-            checkOppHand()
-
-            checkPlayerHand()
-            checkWhoWins()
         break;
         case 6:
             console.log('river bet')
             for (let i = 0; i < 3; i++) {
                 opponentDecision(i+1)
             }
+
+            break;
+        case 7:
+            checkOppHand()
+            checkOppHand()
+            checkOppHand()
+
+            checkPlayerHand()
+            checkWhoWins()
             break;
         default:
             console.log('bruh error')
@@ -641,14 +642,20 @@ function checkOppHand(){
     }
 
     if(oppHandValNum === 1){ //what the freak does opphandvalnum mean
+
         whichOppHandVals = oppHandVals1
         whichOppHandSuites = oppHandSuites1
+
     }else if(oppHandValNum === 2){
+
         whichOppHandVals = oppHandVals2
         whichOppHandSuites = oppHandSuites2
+
     }else if(oppHandValNum===3){
+
         whichOppHandVals = oppHandVals3 
         whichOppHandSuites = oppHandSuites3
+
     }
     else{
         console.log('No opps left (opper stopper)')
@@ -682,9 +689,6 @@ function checkWhoWins(){
     }
 
     winResultDiv.innerHTML = `${winner} wins `
-
-
-
 }
 
 function fold(){
@@ -731,11 +735,15 @@ let opponentFold2 = false;
 let opponentFold3 = false;
 
 
+let botBalance1 = 1000000;
+let botBalance2 = 1000000;
+let botBalance3 = 1000000;
+
 function opponentDecision(whichOpponent){
 
-    console.log(opponentFold1)
-    console.log(opponentFold2)
-    console.log(opponentFold3)
+    // console.log(opponentFold1)
+    // console.log(opponentFold2)
+    // console.log(opponentFold3)
 
 
     let randNum = generateRandNums(3) //four possible decisions the bots can make
@@ -743,50 +751,101 @@ function opponentDecision(whichOpponent){
     // console.log(randNum)
 
     if(whichOpponent===1 && opponentFold1 === false){
-        if(randNum === 0){
+        if(randNum === 0){//*FOLDING----------
             console.log(`opponent ${1} folded`)
+            opp1ResultDiv.innerHTML = 'folded'
             opponentFold1 = true
         }
-        if(randNum === 1){
+        if(randNum === 1){//*CHECKING/CALLING------------
             console.log(`opponent ${1} checked`)
         }
-        if(randNum === 2){
+        if(randNum === 2){ //*RASING----------
             console.log(`opponent ${1} raised`)
+            botRaise(botBalance1) //raise with the first bot's balance
+            botBalance1 -= botRaise(botBalance1);
+
+            let raiseWhaat = botRaise(botBalance1); //VALUE OF HOW MUCH THE BOT HAS RAISED
+            botBalance1 -= raiseWhaat;
+
+            pot += raiseWhaat;
+            potDiv.innerHTML = pot;
+
+            opp1ResultDiv.innerHTML = (`raised ${raiseWhaat}`)
+
         }
     }else if(opponentFold1 === true){
         console.log('opponent 1 has folded')
     }
 
     if(whichOpponent===2 && opponentFold2 === false){
-        if(randNum === 0){
+        if(randNum === 0){//*FOLDING---------
             console.log(`opponent ${2} folded`)
+            opp2ResultDiv.innerHTML = 'folded'
             opponentFold2 = true
         }
-        if(randNum === 1){
+        if(randNum === 1){//*CHECKING/CALLING----------
             console.log(`opponent ${2} checked`)
         }
-        if(randNum === 2){
+        if(randNum === 2){//*RASING-----------
             console.log(`opponent ${2} raised`)
+            botRaise(botBalance2) //raise with the second bot's balance
+
+            let raiseWhaat = botRaise(botBalance2); //VALUE OF HOW MUCH THE BOT HAS RAISED
+            botBalance2 -= raiseWhaat;
+
+            pot += raiseWhaat;
+            potDiv.innerHTML = pot;
+
+            opp2ResultDiv.innerHTML = (`raised ${raiseWhaat}`)
+
+
         }
     }else if(opponentFold2 === true){
         console.log('opponent 2 has folded')
     }
 
     if(whichOpponent===3  && opponentFold3 === false){
-        if(randNum === 0){
+        if(randNum === 0){//*FOLDING---------
             console.log(`opponent ${3} folded`)
+            opp3ResultDiv.innerHTML = 'folded'
             opponentFold3 = true
         }
-        if(randNum === 1){
+        if(randNum === 1){//*CHECKING/CALLING-----------
             console.log(`opponent ${3} checked`)
         }
-        if(randNum === 2){
+        if(randNum === 2){//*RASING------------
             console.log(`opponent ${3} raised`)
+            botRaise(botBalance3) //raise with the third bot's balance
+            botBalance3 -= botRaise(botBalance3);
+
+            let raiseWhaat = botRaise(botBalance3); //VALUE OF HOW MUCH THE BOT HAS RAISED
+            botBalance2 -= raiseWhaat;
+
+            pot += raiseWhaat;
+            potDiv.innerHTML = pot;
+
+            opp3ResultDiv.innerHTML = (`raised ${raiseWhaat}`)
         }
     }else if(opponentFold3 === true){
         console.log('opponent 3 has folded')
     }
 
+}
+
+
+
+let maxPercent = 20; //*Max percent bots can raise is 20% of their hand
+
+function call(){
+
+}
+
+function botRaise(whichBotBalance){//returns a random raise value
+    let result = (whichBotBalance * maxPercent) / 100;
+    let howMuchBotRaise = generateRandNums(result)
+    // console.log(howMuchBotRaise)
+    return howMuchBotRaise;
+    // generateRandNums
 }
 
 //TODO: add bad bots, like the bots go all in every time
@@ -810,3 +869,11 @@ function opponentDecision(whichOpponent){
 //Oct-9-2024------
 //!PROBLEM, I dont know how do evaluate all the opponent hands!
 //*SOLUTIION? Try and
+
+//Oct-15-2024-----
+//*BOTS CALLING LETS GO!
+//*If someone has raised, then checking makes the bot match the raise
+//*let callValue = raise (how much raised?)
+//*At the beginning of each turn, the 'ifRaised' variable is zero
+///*AAAND if someone raises, its now true, and then instead of checking, the call function is called
+//* AAAND after the call function is called the 'ifRaised' variable is now false

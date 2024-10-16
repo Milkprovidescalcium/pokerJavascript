@@ -229,13 +229,16 @@ function setOpponentCardImageDeal(card,which,whichOpp) { //*I KNOW IT'S BAD PRAC
 
 let communityCardsArray = [];
 let cardDrawn;
+
+let ifRaised = false;//checking if the bot or player has raised, if they have, instead of checking the next bot has to call to that value
 function flipCommunityCards(){
+
 
     // console.log(cardsDealt)
     //*function to display the random numbers, this function calls the generateNums() function
     switch(stage){
         case 0:
-            console.log('preflop bet')
+            // console.log('preflop bet')
             for (let i = 0; i < 3; i++) {
                 opponentDecision(i+1)
             }
@@ -250,7 +253,7 @@ function flipCommunityCards(){
             break;
         case 2:
 
-            console.log('flop bet')
+            // console.log('flop bet')
             for (let i = 0; i < 3; i++) {
                 opponentDecision(i+1) //call opponent decision three times, each time with a different opponent
             }
@@ -261,12 +264,12 @@ function flipCommunityCards(){
             const turnCard = generateCardForHand('community');
             setCardImage(turnCard, 4);
 
-            console.log('turn')
+            // console.log('turn')
 
         break;
 
         case 4:
-            console.log('turn bet')
+            // console.log('turn bet')
             for (let i = 0; i < 3; i++) {
                 opponentDecision(i+1)
             }
@@ -277,13 +280,19 @@ function flipCommunityCards(){
 
         break;
         case 6:
-            console.log('river bet')
+            // console.log('river bet')
             for (let i = 0; i < 3; i++) {
                 opponentDecision(i+1)
             }
 
             break;
         case 7:
+            var elements = document.getElementsByClassName('cardHider')
+
+            for (var i = 0; i < elements.length; i++){
+                elements[i].style.display = 'none';
+            }
+
             checkOppHand()
             checkOppHand()
             checkOppHand()
@@ -578,8 +587,8 @@ function checkOppHand(){
     let { wholeHandVals, wholeHandSuites } = combineArrays(whichOppHandVals, communityVals, whichOppHandSuites, communitySuites);
     
     
-    console.log(wholeHandVals)
-    console.log(wholeHandSuites)
+    // console.log(wholeHandVals)
+    // console.log(wholeHandSuites)
     // Check for different hand types
     let resultText = '';
     if (checkStraight(wholeHandVals)) {
@@ -601,6 +610,7 @@ function checkOppHand(){
         resultText = checkPair(wholeHandVals) + ' pairs!';
         handValue = checkPair(wholeHandVals);
         console.log(handValue)
+
     } else {
         resultText = 'wow they have nothing!';
         handValue = 0;
@@ -621,21 +631,21 @@ function checkOppHand(){
     oppHandValNum++
 
     if (opponentFold1 === true) {
-        opp1ResultDiv.innerHTML = 'folded'
+        opp1ResultDiv.innerHTML = 'FOLDEDDD'
         opp1HandValue = 0
     }else if(oppHandValNum === 1){
         opp1ResultDiv.innerHTML = resultText;
     }
 
     if (opponentFold2 === true) {
-        opp2ResultDiv.innerHTML = 'folded'
+        opp2ResultDiv.innerHTML = 'FOLDEDDD'
         opp2HandValue = 0
     }else if(oppHandValNum === 2){
         opp2ResultDiv.innerHTML = resultText;
     }
 
     if (opponentFold3 === true) {
-        opp3ResultDiv.innerHTML = 'folded'
+        opp3ResultDiv.innerHTML = 'FOLDEDDD'
         opp3HandValue = 0
     }else if(oppHandValNum === 3){
         opp3ResultDiv.innerHTML = resultText;
@@ -739,6 +749,9 @@ let botBalance1 = 1000000;
 let botBalance2 = 1000000;
 let botBalance3 = 1000000;
 
+
+let raiseWhaat;//VALUE OF HOW MUCH THE BOT HAS RAISED
+
 function opponentDecision(whichOpponent){
 
     // console.log(opponentFold1)
@@ -747,24 +760,28 @@ function opponentDecision(whichOpponent){
 
 
     let randNum = generateRandNums(3) //four possible decisions the bots can make
-    console.log(whichOpponent)
+    // console.log(whichOpponent)
     // console.log(randNum)
 
     if(whichOpponent===1 && opponentFold1 === false){
         if(randNum === 0){//*FOLDING----------
-            console.log(`opponent ${1} folded`)
+            // console.log(`opponent ${1} folded`)
             opp1ResultDiv.innerHTML = 'folded'
             opponentFold1 = true
         }
         if(randNum === 1){//*CHECKING/CALLING------------
-            console.log(`opponent ${1} checked`)
+            // console.log(`opponent ${1} checked`)
+
+            opp1ResultDiv.innerHTML = 'checked'
+
+
         }
         if(randNum === 2){ //*RASING----------
-            console.log(`opponent ${1} raised`)
+            // console.log(`opponent ${1} raised`)
             botRaise(botBalance1) //raise with the first bot's balance
             botBalance1 -= botRaise(botBalance1);
 
-            let raiseWhaat = botRaise(botBalance1); //VALUE OF HOW MUCH THE BOT HAS RAISED
+            raiseWhaat = botRaise(botBalance1); //VALUE OF HOW MUCH THE BOT HAS RAISED
             botBalance1 -= raiseWhaat;
 
             pot += raiseWhaat;
@@ -774,23 +791,26 @@ function opponentDecision(whichOpponent){
 
         }
     }else if(opponentFold1 === true){
-        console.log('opponent 1 has folded')
+        // console.log('opponent 1 has folded')
     }
 
     if(whichOpponent===2 && opponentFold2 === false){
         if(randNum === 0){//*FOLDING---------
-            console.log(`opponent ${2} folded`)
+            // console.log(`opponent ${2} folded`)
             opp2ResultDiv.innerHTML = 'folded'
             opponentFold2 = true
         }
         if(randNum === 1){//*CHECKING/CALLING----------
-            console.log(`opponent ${2} checked`)
+            // console.log(`opponent ${2} checked`)
+
+            opp2ResultDiv.innerHTML = 'checked'
+   
         }
         if(randNum === 2){//*RASING-----------
-            console.log(`opponent ${2} raised`)
+            // console.log(`opponent ${2} raised`)
             botRaise(botBalance2) //raise with the second bot's balance
 
-            let raiseWhaat = botRaise(botBalance2); //VALUE OF HOW MUCH THE BOT HAS RAISED
+            raiseWhaat = botRaise(botBalance2); //VALUE OF HOW MUCH THE BOT HAS RAISED
             botBalance2 -= raiseWhaat;
 
             pot += raiseWhaat;
@@ -801,24 +821,27 @@ function opponentDecision(whichOpponent){
 
         }
     }else if(opponentFold2 === true){
-        console.log('opponent 2 has folded')
+        // console.log('opponent 2 has folded')
     }
 
     if(whichOpponent===3  && opponentFold3 === false){
         if(randNum === 0){//*FOLDING---------
-            console.log(`opponent ${3} folded`)
+            // console.log(`opponent ${3} folded`)
             opp3ResultDiv.innerHTML = 'folded'
             opponentFold3 = true
         }
         if(randNum === 1){//*CHECKING/CALLING-----------
-            console.log(`opponent ${3} checked`)
+            // console.log(`opponent ${3} checked`)
+
+            opp3ResultDiv.innerHTML = 'checked'
+
         }
         if(randNum === 2){//*RASING------------
-            console.log(`opponent ${3} raised`)
+            // console.log(`opponent ${3} raised`)
             botRaise(botBalance3) //raise with the third bot's balance
             botBalance3 -= botRaise(botBalance3);
 
-            let raiseWhaat = botRaise(botBalance3); //VALUE OF HOW MUCH THE BOT HAS RAISED
+            raiseWhaat = botRaise(botBalance3); //VALUE OF HOW MUCH THE BOT HAS RAISED
             botBalance2 -= raiseWhaat;
 
             pot += raiseWhaat;
@@ -827,7 +850,7 @@ function opponentDecision(whichOpponent){
             opp3ResultDiv.innerHTML = (`raised ${raiseWhaat}`)
         }
     }else if(opponentFold3 === true){
-        console.log('opponent 3 has folded')
+        // console.log('opponent 3 has folded')
     }
 
 }
@@ -836,9 +859,7 @@ function opponentDecision(whichOpponent){
 
 let maxPercent = 20; //*Max percent bots can raise is 20% of their hand
 
-function call(){
 
-}
 
 function botRaise(whichBotBalance){//returns a random raise value
     let result = (whichBotBalance * maxPercent) / 100;
@@ -877,3 +898,6 @@ function botRaise(whichBotBalance){//returns a random raise value
 //*At the beginning of each turn, the 'ifRaised' variable is zero
 ///*AAAND if someone raises, its now true, and then instead of checking, the call function is called
 //* AAAND after the call function is called the 'ifRaised' variable is now false
+
+//!PROBLEM, I don't want to keep coding the bots!
+//*SOLUTION: Stop coding the bots!

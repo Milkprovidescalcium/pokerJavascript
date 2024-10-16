@@ -161,6 +161,61 @@ body{
     flex-direction: row
 }
 
+#opp1ResultContainer{
+    display: flex;
+    justify-content: center;
+    border: 5px solid red;
+}
+#opp2ResultContainer{
+    display: flex;
+    justify-content: center;
+    border: 5px solid red;
+}
+#opp3ResultContainer{
+    display: flex;
+    justify-content: center;
+    border: 5px solid red;
+}
+.card-hider{
+    /* position:absolute; */
+    width: 100px;
+    height: 140px;
+    margin: 5px;
+
+}
+.cardHider{
+    width: 100px;
+    height: 140px;
+    box-sizing: border-box;
+    display:block;
+    /* border: 5px solid green; */
+
+}
+.hider-container{
+    position:absolute;
+    display:flex;
+    flex-direction: row;
+}
+#opp1Result{
+    bottom:0;
+}
+
+#hideContainer1{
+    bottom: 0;         
+    left: 0;    
+    padding: 10px;
+}
+#hideContainer2{
+    top: 0;         
+    left: 0;    
+    padding: 10px
+}
+#hideContainer3{
+    top: 0;         
+    right: 0;   
+    padding: 10px;
+}
+
 .raise-container{
     display:none;
 }

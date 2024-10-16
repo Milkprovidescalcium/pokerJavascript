@@ -163,18 +163,24 @@ body{
 
 #opp1ResultContainer{
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
+    flex-direction: column;
+
     border: 5px solid red;
 }
 #opp2ResultContainer{
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
+    flex-direction: column;
+
     border: 5px solid red;
 }
 #opp3ResultContainer{
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
+    flex-direction: column;
     border: 5px solid red;
+    
 }
 .card-hider{
     /* position:absolute; */
@@ -215,6 +221,8 @@ body{
     right: 0;   
     padding: 10px;
 }
+
+
 
 .raise-container{
     display:none;

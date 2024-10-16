@@ -17,12 +17,7 @@
         </div>
         <div id = 'table' class = 'table'>
             <div id = 'resultsContainer' class = 'results-container'>
-                <div id = "result" class = "result">result</div>&nbsp;&nbsp;
-              
-
-              
-                <br>
-               
+                <div id = "result" class = "result">result</div>
                 <br>
                 <div id = "winResult" class = "win-result">winResult</div>
 
@@ -31,8 +26,8 @@
             <div id = 'boardContainer' class = 'board-container'>
                 <div id = "board" class = "board">
                     <div id="potContainer" class = 'pot-container'>
-                        <span>pot: </span>
-                        <div id = "pot" class = "pot">0</div>
+                        <span>pot: &nbsp</span>
+                        <div id = "pot" class = "pot">L£0</div>
 
                     </div>
                     <div id = "boardContentContainer" class = 'board-content-container'>
@@ -97,9 +92,10 @@
                         <div id = "opponent1Card2" class = 'card'></div>
                     </div>
                     <div id = "opp1ResultContainer">
+                        <div id="opp1Balance">Balance:</div>
+                        <div id="opp1BalanceValue">0</div>
                         <div id="opp1Result"></div> 
                     </div>
-                
                 </div>
 
 
@@ -119,8 +115,11 @@
                         <div id = "opponent2Card2" class = 'card'></div>
                     </div>
                     <div id = "opp2ResultContainer">
+                        <div id="opp2Balance">Balance:</div>
+                        <div id="opp2BalanceValue">0</div>
                         <div id="opp2Result"></div>
                     </div>
+
                 </div>
 
                 <div id = 'opponent3Images' class='opponent-3-images hand'>
@@ -133,6 +132,8 @@
                         </div>
                     </div>
                     <div id = "opp3ResultContainer">
+                        <div id="opp3Balance">Balance:</div>
+                        <div id="opp3BalanceValue">0</div>
                         <div id="opp3Result"></div>
                     </div>
                     <div class="card-wrapper">
@@ -156,7 +157,7 @@
                 <button onclick="checkOppHand()"type = "button" id = "checkOppHand">checkOppHand</button>
                 <button onclick="checkWhoWins()"type = "button" id = "checkWhoWins">checkWhoWins</button> -->
                 <button onclick="flipCommunityCards()"type = "button" id = "flipButton">flip</button>
-                <button onclick="fold()"type = "button" id = "foldButton" class = 'fold-button'>fold</button>
+                <button onclick="playerFold()"type = "button" id = "foldButton" class = 'fold-button'>fold</button>
                 <button onclick="check()"type = "button" id = "checkButton" class = 'check-button'>check</button>
                 
                 <button onclick="raise()"type = "button" id = "raiseButton" class = 'raise-button'>raise</button>

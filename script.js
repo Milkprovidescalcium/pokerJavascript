@@ -125,9 +125,9 @@ let values = [1,2,3,4,5,6,7,8,9,10,11,12,13];
 
 let cardsDealt = [];
 
-let balance = 100;
+let balance = 14;
 const balanceText = document.getElementById('balance')
-balanceText.innerHTML = balance;
+balanceText.innerHTML = `L£${balance}`;
 const button = document.getElementById('temp')
 
 
@@ -295,11 +295,15 @@ function flipCommunityCards(){
 
             break;
         case 7:
-            let hiders = document.getElementsByClassName('cardHider')
+            let hiders = document.getElementsByClassName('cardHider') //the back card images
 
             for (let i = 0; i < hiders.length; i++){
                 hiders[i].style.display = 'none';
             }
+
+            opp1ResultDiv.innerHTML = ""
+            opp2ResultDiv.innerHTML = ""
+            opp3ResultDiv.innerHTML = ""
 
             checkOppHand()
             checkOppHand()
@@ -574,8 +578,7 @@ function checkPlayerHand() {
     // Display the result and update the pot and balance
     resultDiv.innerHTML = resultText;
     winResultDiv.innerHTML = `The value of your hand is ${playerHandValue}`;
-    balance += pot;
-    pot = 0;
+    
     potDiv.innerHTML = (`L£${pot}`);
     handDiv.innerHTML = balance;
 }
@@ -708,9 +711,49 @@ function checkWhoWins(){
         highestHandValue = opp3HandValue;
 
     }
-
+    let botBalance1 = 1000000;
+    let botBalance2 = 1000000;
+    let botBalance3 = 1000000;
+    
+    const opp1BalanceText = document.getElementById('opp1BalanceValue')
+    const opp2BalanceText =document.getElementById('opp2BalanceValue')
+    const opp3BalanceText =document.getElementById('opp3BalanceValue')
+    
     winResultDiv.innerHTML = `${winner} wins `
+    switch (winner){
+
+        case 'Player':
+            // alert('player')
+            balance += pot
+            balanceText.innerHTML =  (`L£${balance}`);
+            break;
+        case 'Opponent 1':
+            // alert('Opponent 1')
+            botBalance1 += pot;
+            opp1BalanceText.innerHTML = (`L£${botBalance1}`)
+            break;
+
+        case 'Opponent 2':
+            // alert('Opponent 2')
+            botBalance2 += pot;
+            opp2BalanceText.innerHTML = (`L£${botBalance2}`)
+            break;
+
+        case 'Opponent 3':
+            // alert('Opponent 3')
+            botBalance3 += pot;
+            opp3BalanceText.innerHTML = (`L£${botBalance3}`)
+            break;
+
+    }
+    pot = 0;
+    potDiv.innerHTML = (`L£${pot}`);
+ 
 }
+
+
+
+
 
 function fold(){
     console.log('folded')
@@ -738,8 +781,18 @@ let submitRaiseButtonDiv = document.getElementById('submitRaiseButton')
 let howMuchRaiseDiv = document.getElementById('howMuchRaise')
 
 function submitRaise(){
-    pot += parseInt(howMuchRaiseDiv.value)
-    potDiv.innerHTML = (`L£${pot}`)
+
+    if(balance >= parseInt(howMuchRaiseDiv.value)){
+        pot += parseInt(howMuchRaiseDiv.value)
+        balance -= parseInt(howMuchRaiseDiv.value)
+        balanceText.innerHTML = `L£${balance}`
+
+        potDiv.innerHTML = (`L£${pot}`)
+
+    
+    }else{
+        alert('ur broke')
+    }
 
     flipCommunityCards()
     stage++;
@@ -763,10 +816,13 @@ let botBalance1 = 1000000;
 let botBalance2 = 1000000;
 let botBalance3 = 1000000;
 
-document.getElementById('opp1BalanceValue').innerHTML = (`L£${botBalance1}`)
-document.getElementById('opp2BalanceValue').innerHTML = (`L£${botBalance2}`)
-document.getElementById('opp3BalanceValue').innerHTML = (`L£${botBalance3}`)
+const opp1BalanceText = document.getElementById('opp1BalanceValue')
+const opp2BalanceText =document.getElementById('opp2BalanceValue')
+const opp3BalanceText =document.getElementById('opp3BalanceValue')
 
+opp1BalanceText.innerHTML = (`L£${botBalance1}`)
+opp2BalanceText.innerHTML = (`L£${botBalance2}`)
+opp3BalanceText.innerHTML = (`L£${botBalance3}`)
 
 
 let raiseWhaat;//VALUE OF HOW MUCH THE BOT HAS RAISED
@@ -807,7 +863,7 @@ function opponentDecision(whichOpponent){
             pot += raiseWhaat;
             potDiv.innerHTML = (`L£${pot}`);
 
-            opp1ResultDiv.innerHTML = (`raised ${raiseWhaat}`)
+            opp1ResultDiv.innerHTML = (`raised L£${raiseWhaat}`)
 
         }
     }else if(opponentFold1 === true){
@@ -836,7 +892,7 @@ function opponentDecision(whichOpponent){
             pot += raiseWhaat;
             potDiv.innerHTML = (`L£${pot}`);
 
-            opp2ResultDiv.innerHTML = (`raised ${raiseWhaat}`)
+            opp2ResultDiv.innerHTML = (`raised L£${raiseWhaat}`)
 
 
         }
@@ -868,7 +924,7 @@ function opponentDecision(whichOpponent){
             pot += raiseWhaat;
             potDiv.innerHTML = (`L£${pot}`);
 
-            opp3ResultDiv.innerHTML = (`raised ${raiseWhaat}`)
+            opp3ResultDiv.innerHTML = (`raised L£${raiseWhaat}`)
         }
     }else if(opponentFold3 === true){
         // console.log('opponent 3 has folded')

@@ -152,6 +152,13 @@ function generateRandNums(max){
 // Get all keys from the object
 
 
+
+function numberWithSpaces(x) { //this function adds spaces to big numbers, like turning 1000000 into 1 000 000
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+}
+
+
+
 function generateCardForHand(whichHand) {//by default, the hand that is drawin is a community card
     let randomCard, randomSuite, card;
     
@@ -592,6 +599,7 @@ let opp3ResultDiv = document.getElementById('opp3Result');
 
 
 function checkOppHand(){
+    oppHandValNum++
 
     let handValue = 0;
 
@@ -642,6 +650,7 @@ function checkOppHand(){
     // console.log(opp3HandValue)
 
 
+ 
 
     if (opponentFold1 === true) {
         opp1ResultDiv.innerHTML = 'FOLDEDDD'
@@ -658,10 +667,13 @@ function checkOppHand(){
     }
 
     if (opponentFold3 === true) {
+        console.log('HIIII')
         opp3ResultDiv.innerHTML = 'FOLDEDDD'
         opp3HandValue = 0
+
     }else if(oppHandValNum === 3){
         opp3ResultDiv.innerHTML = resultText;
+
     }
 
     if(oppHandValNum === 1){ //what the freak does opphandvalnum mean
@@ -684,8 +696,7 @@ function checkOppHand(){
         console.log('No opps left (opper stopper)')
     }
 
-    oppHandValNum++
-
+    console.log(oppHandValNum)
     resultDiv.innerHTML = resultText;
     winResultDiv.innerHTML = `The value of your hand is ${playerHandValue}`;
     // winResultDiv.innerHTML =`The value of opponent ${oppHandValNum}'s hand is ${handValue}`;
@@ -693,8 +704,8 @@ function checkOppHand(){
 
 
 function checkWhoWins(){
-    let winner = 'Player';
-    let highestHandValue = playerHandValue;
+    let winner = 'Opponent 3';
+    let highestHandValue = opp3HandValue;
 
     if (opp1HandValue > highestHandValue) {
         winner = 'Opponent 1';
@@ -706,9 +717,9 @@ function checkWhoWins(){
         highestHandValue = opp2HandValue;
 
     }
-    if (opp3HandValue > highestHandValue) {
-        winner = 'Opponent 3';
-        highestHandValue = opp3HandValue;
+    if (playerHandValue > highestHandValue) {
+        winner = 'Player';
+        highestHandValue = playerHandValue;
 
     }
     let botBalance1 = 1000000;
@@ -725,24 +736,24 @@ function checkWhoWins(){
         case 'Player':
             // alert('player')
             balance += pot
-            balanceText.innerHTML =  (`L£${balance}`);
+            balanceText.innerHTML =  (`L£${numberWithSpaces(balance)}`);
             break;
         case 'Opponent 1':
             // alert('Opponent 1')
             botBalance1 += pot;
-            opp1BalanceText.innerHTML = (`L£${botBalance1}`)
+            opp1BalanceText.innerHTML = (`L£${numberWithSpaces(balance)}`)
             break;
 
         case 'Opponent 2':
             // alert('Opponent 2')
             botBalance2 += pot;
-            opp2BalanceText.innerHTML = (`L£${botBalance2}`)
+            opp2BalanceText.innerHTML = (`L£${numberWithSpaces(balance)}`)
             break;
 
         case 'Opponent 3':
             // alert('Opponent 3')
             botBalance3 += pot;
-            opp3BalanceText.innerHTML = (`L£${botBalance3}`)
+            opp3BalanceText.innerHTML = (`L£${numberWithSpaces(balance)}`)
             break;
 
     }
@@ -785,9 +796,9 @@ function submitRaise(){
     if(balance >= parseInt(howMuchRaiseDiv.value)){
         pot += parseInt(howMuchRaiseDiv.value)
         balance -= parseInt(howMuchRaiseDiv.value)
-        balanceText.innerHTML = `L£${balance}`
+        balanceText.innerHTML = `L£${numberWithSpaces(balance)}`
 
-        potDiv.innerHTML = (`L£${pot}`)
+        potDiv.innerHTML = (`L£${numberWithSpaces(pot)}`)
 
     
     }else{
@@ -795,7 +806,7 @@ function submitRaise(){
     }
 
     flipCommunityCards()
-    stage++;
+
 }
 
 let potDiv = document.getElementById('pot')
@@ -803,7 +814,7 @@ let handDiv = document.getElementById('balance')
 function bet(){
     balance -=howMuch
     pot += howMuch
-    potDiv.innerHTML = (`L£${pot}`)
+    potDiv.innerHTML = (`L£${numberWithSpaces(pot)}`)
     handDiv.innerHTML = balance
 }
 
@@ -820,9 +831,9 @@ const opp1BalanceText = document.getElementById('opp1BalanceValue')
 const opp2BalanceText =document.getElementById('opp2BalanceValue')
 const opp3BalanceText =document.getElementById('opp3BalanceValue')
 
-opp1BalanceText.innerHTML = (`L£${botBalance1}`)
-opp2BalanceText.innerHTML = (`L£${botBalance2}`)
-opp3BalanceText.innerHTML = (`L£${botBalance3}`)
+opp1BalanceText.innerHTML = (`L£${numberWithSpaces(botBalance1)}`)
+opp2BalanceText.innerHTML = (`L£${numberWithSpaces(botBalance2)}`)
+opp3BalanceText.innerHTML = (`L£${numberWithSpaces(botBalance3)}`)
 
 
 let raiseWhaat;//VALUE OF HOW MUCH THE BOT HAS RAISED
@@ -834,7 +845,7 @@ function opponentDecision(whichOpponent){
     // console.log(opponentFold3)
 
 
-    let randNum = generateRandNums(3) //four possible decisions the bots can make
+    let randNum = generateRandNums(100) //four possible decisions the bots can make
     // console.log(whichOpponent)
     // console.log(randNum)
 
@@ -844,31 +855,30 @@ function opponentDecision(whichOpponent){
             opp1ResultDiv.innerHTML = 'folded'
             opponentFold1 = true
         }
-        if(randNum === 1){//*CHECKING/CALLING------------
+        if((randNum > 1 && randNum <50)){//*CHECKING/CALLING------------
             // console.log(`opponent ${1} checked`)
 
             opp1ResultDiv.innerHTML = 'checked'
 
 
         }
-        if(randNum === 2){ //*RASING----------
+        if((randNum >= 50 && randNum <100)){ //*RASING----------
             // console.log(`opponent ${1} raised`)
             botRaise(botBalance1) //raise with the first bot's balance
             botBalance1 -= botRaise(botBalance1);
 
             raiseWhaat = botRaise(botBalance1); //VALUE OF HOW MUCH THE BOT HAS RAISED
             botBalance1 -= raiseWhaat;
-            document.getElementById('opp1BalanceValue').innerHTML = (`L£${botBalance1}`)
+            document.getElementById('opp1BalanceValue').innerHTML = (`L£${numberWithSpaces(botBalance1)}`)
 
             pot += raiseWhaat;
-            potDiv.innerHTML = (`L£${pot}`);
+            potDiv.innerHTML = (`L£${numberWithSpaces(pot)}`);
 
-            opp1ResultDiv.innerHTML = (`raised L£${raiseWhaat}`)
+            opp1ResultDiv.innerHTML = (`raised L£${numberWithSpaces(raiseWhaat)}`)
 
         }
-    }else if(opponentFold1 === true){
-        // console.log('opponent 1 has folded')
     }
+    
 
     if(whichOpponent===2 && opponentFold2 === false){
         if(randNum === 0){//*FOLDING---------
@@ -876,58 +886,53 @@ function opponentDecision(whichOpponent){
             opp2ResultDiv.innerHTML = 'folded'
             opponentFold2 = true
         }
-        if(randNum === 1){//*CHECKING/CALLING----------
+        if((randNum > 1 && randNum <50)){//*CHECKING/CALLING----------
             // console.log(`opponent ${2} checked`)
 
             opp2ResultDiv.innerHTML = 'checked'
    
         }
-        if(randNum === 2){//*RASING-----------
+        if((randNum >= 50 && randNum <100)){//*RASING-----------
             // console.log(`opponent ${2} raised`)
             botRaise(botBalance2) //raise with the second bot's balance
 
             raiseWhaat = botRaise(botBalance2); //VALUE OF HOW MUCH THE BOT HAS RAISED
             botBalance2 -= raiseWhaat;
-            document.getElementById('opp2BalanceValue').innerHTML = (`L£${botBalance2}`)
+            document.getElementById('opp2BalanceValue').innerHTML = (`L£${numberWithSpaces(botBalance2)}`)
             pot += raiseWhaat;
-            potDiv.innerHTML = (`L£${pot}`);
+            potDiv.innerHTML = (`L£${numberWithSpaces(pot)}`);
 
-            opp2ResultDiv.innerHTML = (`raised L£${raiseWhaat}`)
+            opp2ResultDiv.innerHTML = (`raised L£${numberWithSpaces(raiseWhaat)}`)
 
 
         }
-    }else if(opponentFold2 === true){
-        // console.log('opponent 2 has folded')
     }
-
     if(whichOpponent===3  && opponentFold3 === false){
         if(randNum === 0){//*FOLDING---------
             // console.log(`opponent ${3} folded`)
             opp3ResultDiv.innerHTML = 'folded'
             opponentFold3 = true
         }
-        if(randNum === 1){//*CHECKING/CALLING-----------
+        if((randNum > 1 && randNum <50)){//*CHECKING/CALLING-----------
             // console.log(`opponent ${3} checked`)
 
             opp3ResultDiv.innerHTML = 'checked'
 
         }
-        if(randNum === 2){//*RASING------------
+        if((randNum >= 50 && randNum <100)){//*RASING------------
             // console.log(`opponent ${3} raised`)
             botRaise(botBalance3) //raise with the third bot's balance
             botBalance3 -= botRaise(botBalance3);
 
             raiseWhaat = botRaise(botBalance3); //VALUE OF HOW MUCH THE BOT HAS RAISED
             botBalance3 -= raiseWhaat;
-            document.getElementById('opp3BalanceValue').innerHTML = (`L£${botBalance3}`)
+            document.getElementById('opp3BalanceValue').innerHTML = (`L£${numberWithSpaces(botBalance3)}`)
 
             pot += raiseWhaat;
-            potDiv.innerHTML = (`L£${pot}`);
+            potDiv.innerHTML = (`L£${numberWithSpaces(pot)}`);
 
-            opp3ResultDiv.innerHTML = (`raised L£${raiseWhaat}`)
+            opp3ResultDiv.innerHTML = (`raised L£${numberWithSpaces(raiseWhaat)}`)
         }
-    }else if(opponentFold3 === true){
-        // console.log('opponent 3 has folded')
     }
 
 }
@@ -937,8 +942,9 @@ function opponentDecision(whichOpponent){
 let maxPercent = 20; //*Max percent bots can raise is 20% of their hand
 
 function playerFold(){
-    console.log('folded')
+    // console.log('folded')
     alert('never give up!')
+    //* play first few seconds of hopes and dreams from undertale
 }
 
 function check(){
@@ -953,6 +959,14 @@ function botRaise(whichBotBalance){//returns a random raise value
     return howMuchBotRaise;
     // generateRandNums
 }
+
+function play(){
+    flipCommunityCards()
+    document.querySelector('.play-button').style.visibility = 'hidden'
+    document.querySelector('.mainButtonsContainer').style.visibility = 'visible'
+}
+
+
 
 //TODO: add bad bots, like the bots go all in every time
 //TODO: add an equation to evaluate the 'value' of each hand
@@ -972,11 +986,8 @@ function botRaise(whichBotBalance){//returns a random raise value
 //*SOLUTION, make handVals a real thing? Push the items to handVals and then merge them (for real this time)
 //*SOLUTION: handle all the pushing array sorting stuff in the generateCard function
 
-//Oct-9-2024------
-//!PROBLEM, I dont know how do evaluate all the opponent hands!
-//*SOLUTIION? Try and
 
-//Oct-15-2024-----
+//Oct-15-2024-----ABANDONED
 //*BOTS CALLING LETS GO!
 //*If someone has raised, then checking makes the bot match the raise
 //*let callValue = raise (how much raised?)
@@ -984,5 +995,10 @@ function botRaise(whichBotBalance){//returns a random raise value
 ///*AAAND if someone raises, its now true, and then instead of checking, the call function is called
 //* AAAND after the call function is called the 'ifRaised' variable is now false
 
+//Oct-15-2024-----DONE
 //!PROBLEM, I don't want to keep coding the bots!
 //*SOLUTION: Stop coding the bots!
+
+//Oct-17-2024-----DONE
+//!PROBLEM, Flushes don't work!
+//*SOLUTION: Fix flushes! Maybe make a set to store the pair and the three as seperate values?

@@ -237,6 +237,12 @@ function setOpponentCardImageDeal(card,which,whichOpp) { //*I KNOW IT'S BAD PRAC
 let communityCardsArray = [];
 let cardDrawn;
 
+let playButton = document.querySelector('.play-button')
+let mainButtons = document.querySelector('.mainButtonsContainer')
+let nextButton = document.getElementById('nextButton')
+
+const funnyMusic = new Audio('funnyMusic.mp3');
+
 let ifRaised = false;//checking if the bot or player has raised, if they have, instead of checking the next bot has to call to that value
 function flipCommunityCards(){
 
@@ -249,6 +255,8 @@ function flipCommunityCards(){
             for (let i = 0; i < 3; i++) {
                 opponentDecision(i+1)
             }
+            mainButtons.style.visibility = 'hidden'
+            nextButton.style.visibility = 'visible'
             break
         case 1:// Flop
 
@@ -257,6 +265,10 @@ function flipCommunityCards(){
                 setCardImage(cardDrawn, i + 1);
 
             }
+            mainButtons.style.visibility = 'visible'
+            nextButton.style.visibility = 'hidden'
+            playButton.style.visibility = 'hidden'
+
             opp1ResultDiv.innerHTML = ""
             opp2ResultDiv.innerHTML = ""
             opp3ResultDiv.innerHTML = ""
@@ -269,7 +281,10 @@ function flipCommunityCards(){
                 opponentDecision(i+1) //call opponent decision three times, each time with a different opponent
             }
 
+            mainButtons.style.visibility = 'hidden'
+            nextButton.style.visibility = 'visible'
             break;
+
             
         case 3: // Turn
             const turnCard = generateCardForHand('community');
@@ -279,6 +294,9 @@ function flipCommunityCards(){
             opp1ResultDiv.innerHTML = ""
             opp2ResultDiv.innerHTML = ""
             opp3ResultDiv.innerHTML = ""
+
+            mainButtons.style.visibility = 'visible'
+            nextButton.style.visibility = 'hidden'
         break;
 
         case 4:
@@ -286,6 +304,10 @@ function flipCommunityCards(){
             for (let i = 0; i < 3; i++) {
                 opponentDecision(i+1)
             }
+
+            
+            mainButtons.style.visibility = 'hidden'
+            nextButton.style.visibility = 'visible'
             break;
         case 5: // River
             const riverCard = generateCardForHand('community');
@@ -293,6 +315,9 @@ function flipCommunityCards(){
             opp1ResultDiv.innerHTML = ""
             opp2ResultDiv.innerHTML = ""
             opp3ResultDiv.innerHTML = ""
+
+            mainButtons.style.visibility = 'visible'
+            nextButton.style.visibility = 'hidden'
         break;
         case 6:
             // console.log('river bet')
@@ -300,6 +325,9 @@ function flipCommunityCards(){
                 opponentDecision(i+1)
             }
 
+
+            mainButtons.style.visibility = 'hidden'
+            nextButton.style.visibility = 'visible'
             break;
         case 7:
             let hiders = document.getElementsByClassName('cardHider') //the back card images
@@ -307,6 +335,9 @@ function flipCommunityCards(){
             for (let i = 0; i < hiders.length; i++){
                 hiders[i].style.display = 'none';
             }
+
+            
+   
 
             opp1ResultDiv.innerHTML = ""
             opp2ResultDiv.innerHTML = ""
@@ -467,33 +498,34 @@ function checkStraight(hand){
 }
 
 let pairsFound = [];
-function checkPair(wholeHandVals){
-    let pairNum = 0;
-    let countedPairs = new Set(); //*sets in javascript are objects that store UNIQUE values, if you try to give a duplicate value, the duplicate value will be ignored
 
-    for(let index = 0; index < values.length; index++){ //checking for every possible suite if is contained in the array of suites in hand
+function checkPair(wholeHandVals, excludeVal = null) {
+    let pairNum = 0;
+    let countedPairs = new Set();
+
+    for(let index = 0; index < values.length; index++) {
         let searchPair = values[index];
         let pairCount = 0;  
-        if (countedPairs.has(searchPair)) {
-            continue;  // if searchValue is already found in the set, skip the value
+
+        // Skip the value if it's in the exclude set or already counted
+        if (countedPairs.has(searchPair) || searchPair === excludeVal) {
+            continue;
         }
 
-        for(let i = 0; i < wholeHandVals.length; i++){
-            if(wholeHandVals[i]===searchPair){//if it's found a suite that matches 'searchString' which is checked for every suite 
+        for(let i = 0; i < wholeHandVals.length; i++) {
+            if (wholeHandVals[i] === searchPair) {
                 pairCount++;
             }
-            if(pairCount === 2){
-                // console.log('is a pair!')
+            if (pairCount === 2) {
                 pairNum++;
-                countedPairs.add(searchPair);
+                countedPairs.add(searchPair);  // Mark this pair as found
                 break;
             }
         }
     }
-    // console.log('not a pair :(')
     return pairNum;
-
 }
+
 function checkThree(wholeHandVals){
 
     for(let index = 0; index < values.length; index++){ //checking for every possible suite if is contained in the array of suites in hand
@@ -506,7 +538,7 @@ function checkThree(wholeHandVals){
             }
             if(threeCount === 3){
                 // console.log('is a three!')
-                return true;
+                return searchThree;
             }
         }
     }
@@ -514,6 +546,7 @@ function checkThree(wholeHandVals){
     return false;
 
 }
+
 function checkFour(wholeHandVals){
     for(let index = 0; index < values.length; index++){ //checking for every possible suite if is contained in the array of suites in hand
         let searchFour = values[index];
@@ -534,11 +567,15 @@ function checkFour(wholeHandVals){
 }
 function checkFull(wholeHandVals){
     //* if checkPair, and checkThree both return true, return true
-    if (checkThree(wholeHandVals) && checkPair(wholeHandVals) > 0) {
-        return true; // Full house found
-    } else {
-        return false; // Not a full house
+    let threeVal = checkThree(wholeHandVals);  // Find if there is a three-of-a-kind
+
+    if (threeVal) {
+        // Now check if there's exactly one pair excluding the three-of-a-kind value
+        if (checkPair(wholeHandVals, threeVal) === 1) {
+            return true; // Full house found
+        }
     }
+    return false; // Not a full house
     
 }
 
@@ -601,6 +638,26 @@ let opp3ResultDiv = document.getElementById('opp3Result');
 function checkOppHand(){
     oppHandValNum++
 
+    if(oppHandValNum === 1){ //what the freak does opphandvalnum mean
+
+        whichOppHandVals = oppHandVals1
+        whichOppHandSuites = oppHandSuites1
+
+    }else if(oppHandValNum === 2){
+
+        whichOppHandVals = oppHandVals2
+        whichOppHandSuites = oppHandSuites2
+
+    }else if(oppHandValNum===3){
+
+        whichOppHandVals = oppHandVals3 
+        whichOppHandSuites = oppHandSuites3
+
+    }
+    else{
+        console.log('No opps left (opper stopper)')
+    }
+
     let handValue = 0;
 
     let { wholeHandVals, wholeHandSuites } = combineArrays(whichOppHandVals, communityVals, whichOppHandSuites, communitySuites);
@@ -628,12 +685,13 @@ function checkOppHand(){
     } else if (checkPair(wholeHandVals)) {
         resultText = checkPair(wholeHandVals) + ' pairs!';
         handValue = checkPair(wholeHandVals);
-        console.log(handValue)
+        // console.log(handValue)
 
     } else {
         resultText = 'wow they have nothing!';
         handValue = 0;
     }
+
 
 
 
@@ -676,25 +734,7 @@ function checkOppHand(){
 
     }
 
-    if(oppHandValNum === 1){ //what the freak does opphandvalnum mean
-
-        whichOppHandVals = oppHandVals1
-        whichOppHandSuites = oppHandSuites1
-
-    }else if(oppHandValNum === 2){
-
-        whichOppHandVals = oppHandVals2
-        whichOppHandSuites = oppHandSuites2
-
-    }else if(oppHandValNum===3){
-
-        whichOppHandVals = oppHandVals3 
-        whichOppHandSuites = oppHandSuites3
-
-    }
-    else{
-        console.log('No opps left (opper stopper)')
-    }
+  
 
     console.log(oppHandValNum)
     resultDiv.innerHTML = resultText;
@@ -766,9 +806,7 @@ function checkWhoWins(){
 
 
 
-function fold(){
-    console.log('folded')
-}
+
 function check(){
     console.log('checked')
 }
@@ -799,13 +837,13 @@ function submitRaise(){
         balanceText.innerHTML = `L£${numberWithSpaces(balance)}`
 
         potDiv.innerHTML = (`L£${numberWithSpaces(pot)}`)
-
+        flipCommunityCards()
     
     }else{
         alert('ur broke')
     }
 
-    flipCommunityCards()
+
 
 }
 
@@ -943,6 +981,13 @@ let maxPercent = 20; //*Max percent bots can raise is 20% of their hand
 
 function playerFold(){
     // console.log('folded')
+    funnyMusic.play();
+
+    setTimeout(() => {
+        funnyMusic.pause(); 
+        // funnyMusic.currentTime = 0; 
+    }, 100); 
+
     alert('never give up!')
     //* play first few seconds of hopes and dreams from undertale
 }
@@ -962,10 +1007,12 @@ function botRaise(whichBotBalance){//returns a random raise value
 
 function play(){
     flipCommunityCards()
-    document.querySelector('.play-button').style.visibility = 'hidden'
-    document.querySelector('.mainButtonsContainer').style.visibility = 'visible'
+  
 }
+function next(){
+    flipCommunityCards()
 
+}
 
 
 //TODO: add bad bots, like the bots go all in every time

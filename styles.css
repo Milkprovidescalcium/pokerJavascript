@@ -234,10 +234,11 @@ body{
 .raise-container{
     display:none;
 }
-
 .play-button{
     visibility: visible;
-
+}
+.next-button{
+    visibility: hidden;
 }
 .mainButtonsContainer{
     width:100%;

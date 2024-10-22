@@ -11,13 +11,8 @@ session_start();
     $user_data = checkLogin($con);//check if user is logged in
     $id =  $_SESSION['user_id'];
 
-    $query = "SELECT credits FROM users WHERE user_id = $id";
-    $result = mysqli_query($con, $query); //grabbing user's credits
-
-    echo 'button clicked';
-
     if (!isset($_POST['storedBalance'])) {
-        echo 'No balance provided';
+        // echo 'No balance provided';
 
     }
 
@@ -38,7 +33,7 @@ session_start();
                 $temp = "UPDATE users SET credits = $credits WHERE user_id = $id";
                 // Do the query
                 if (mysqli_query($con, $temp)) {
-                    echo 'Balance updated!';
+                    // echo 'Balance updated!';
                 } else {
                     echo 'Error updating balance: ' . mysqli_error($con); 
                 }
@@ -46,10 +41,20 @@ session_start();
         }
     }
 
+
+
+    $query = "SELECT credits FROM users WHERE user_id = $id";
+    $result = mysqli_query($con, $query); //grabbing user's credits
+    
+    $creditsText = mysqli_fetch_assoc($result); //fetching a thing makes an array. I named this variable wrong, it should be 'rows' because it is an array of rows
+    // echo $creditsText['credits'];  //and here I am just getting 'credits' from the array of rows
+
+
+
     if ($result) {
         $user = mysqli_fetch_assoc($result);
         $balance = $user['credits'];
-        echo $balance;
+        // echo $balance;
     } else {
         // Handle the case where the query fails
         echo "Error fetching data: " . mysqli_error($con);
@@ -63,13 +68,280 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Texas Hold em!</title>
-    <link rel="stylesheet" href="styles.css">
+    <!--<link rel="stylesheet" href="styles.css">-->
+    <style>
+
+        body{
+            height:100%;
+            width:100%;
+            overflow:hidden;
+
+
+        }
+
+        .page-container{
+            position:absolute;
+            height:100vh;
+            width:100vw;
+            /* display:flex;
+            justify-content: center;
+            align-items: center; */
+        }
+
+        .board-container{
+            height:100%;
+            width:100%;
+            display:flex;
+            justify-content: center;
+            align-items: center;
+
+            position:absolute;
+        }
+        .board{
+
+            aspect-ratio: 3/2;
+            height:600px;
+            /* border: 5px solid red; */
+            margin:20px;
+        /* 
+            background-image:url("TableTexture.jpg"); */
+        }
+        .board-content-container{
+            /* border: 5px solid red; */
+            margin:20px;
+            padding:20px;
+            aspect-ratio: 3/2;
+            height:100px;
+            position: absolute;
+            top: 50%; right: 50%;
+            transform: translate(50%,-50%);
+            display:flex;
+            align-items: center;
+            flex-direction:column;
+        }
+        .community-cards{
+            width:50px;
+            height:50px;
+            margin:10px;
+            /* border: 3px solid red; */
+        }
+        .pot-container{
+            aspect-ratio: 3/2;
+            height:500px;
+            display:flex;
+            justify-content: center;
+            /* border: 3px solid red; */
+        }
+
+        .button-container {
+            position: absolute;
+            bottom: 60px; /* Position buttons above the hand and results */
+            left: 50%;
+            transform: translateX(-50%);
+
+            display:flex;
+            align-items: center;
+            justify-content: center;
+            width:100%;
+        }
+        .hand-container {
+            /* border: 5px solid red; */
+            height: 50px;
+            width: 300px; /* Adjust width as needed */
+            text-align: right; /* Align text to the right */
+            margin-left: auto; /* Push hand to the right */
+        }
+        .hotbar {
+            /* border: 5px solid blue;  */
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+
+            flex-direction: row;
+            /* align-items: center; Center items vertically */
+
+
+            padding: 10px;
+        }
+        .results-container {
+            position:absolute;
+            /* border: 5px solid red; */
+            aspect-ratio: 3/2;
+            height: 850px;
+
+            display: flex;
+            justify-content: center;
+        }
+        .table {
+            position: relative; 
+            left: 50%;
+            transform: translateX(-50%);
+            /* border: 5px solid green; */
+            aspect-ratio: 3/2;
+            height: 850px;
+            margin-bottom: 80px; /* Space for the hand and results */
+
+
+        }
+        .card{
+            box-sizing: border-box;
+            
+            /* margin:5px; */
+            /* border: 5px solid green; */
+            width: 100px;  /* Adjust the width as needed */
+            height: 140px; /* Adjust the height as needed */
+            background-size: cover; /* Ensures the image covers the div */
+        }
+
+        .card-wrapper{
+            margin: 5px;
+        }
+        .community-card-images{
+            /* border: 5px solid green; */
+            height:100px;
+            width:500px;
+            display:flex;
+            flex-direction: row
+        }
+        .hand-card-images{
+            /* border: 5px solid green; */
+            height:100px;
+            width:200px;
+            display:flex;
+            flex-direction: row
+        }
+        .opponent-cards-container{
+            position:relative;
+            aspect-ratio: 3/2;
+            height: 850px;
+            /* border: 5px solid red; */
+            display: flex;
+            justify-content: center;
+        }
+        .opponent-1-images{
+            position: absolute;
+            bottom: 0;         
+            left: 0;    
+            padding: 10px;
+        }
+        .opponent-2-images{
+            position: absolute;
+            top: 0;         
+            left: 0;    
+            padding: 10px;
+        }
+        .opponent-3-images{
+            position: absolute;
+            top: 0;         
+            right: 0;   
+            padding: 10px;
+        }
+        .hand{
+            display: flex;
+            flex-direction: row
+        }
+
+        #opp1ResultContainer{
+            display: flex;
+            /* justify-content: center; */
+            flex-direction: column;
+
+            /* border: 5px solid red; */
+        }
+        #opp2ResultContainer{
+            display: flex;
+            /* justify-content: center; */
+            flex-direction: column;
+
+            /* border: 5px solid red; */
+        }
+        #opp3ResultContainer{
+            display: flex;
+            /* justify-content: center; */
+            flex-direction: column;
+            /* border: 5px solid red; */
+            
+        }
+        .card-hider{
+            /* position:absolute; */
+            width: 100px;
+            height: 140px;
+            margin: 5px;
+
+        }
+        .cardHider{
+            width: 100px;
+            height: 140px;
+            box-sizing: border-box;
+            display:block;
+            /* border: 5px solid green; */
+
+        }
+        .hider-container{
+            position:absolute;
+            display:flex;
+            flex-direction: row;
+        }
+        #opp1Result{
+            bottom:0;
+        }
+
+        #hideContainer1{
+            bottom: 0;         
+            left: 0;    
+            padding: 10px;
+        }
+        #hideContainer2{
+            top: 0;         
+            left: 0;    
+            padding: 10px
+        }
+        #hideContainer3{
+            top: 0;         
+            right: 0;   
+            padding: 10px;
+        }
+
+
+
+        .raise-container{
+            display:none;
+        }
+        .play-button{
+            visibility: visible;
+        }
+        .next-button{
+            visibility: hidden;
+        }
+        .mainButtonsContainer{
+            width:100%;
+            display:flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+        }
+        #balanceForm{
+            display:none;
+        }
+
+        #playerResultContainer{
+            /* border: 5px solid green; */
+            display: flex;
+            /* justify-content: center; */
+            flex-direction: column;
+        }
+
+
+
+    </style>
 </head>
 <body>
  <a href = "logout.php">logout</a>
 
     <form id="balanceForm" method="post">
-        <input type="text" id="storedBalance" name="storedBalance" value="1">
+        <input type="hidden" id="storedBalance" name="storedBalance" value="">
         <input type="submit" name="button1" value="saveCredits"/>
     </form>
     
@@ -77,14 +349,14 @@ session_start();
       
         <div id = 'balanceContainer' class = 'balance-container'>
             <span>balance: </span>
-            <div id = "balance" class = "balance">0</div>
+            <div id = "balance" class = "balance"> <?php echo $creditsText['credits']; ?>;</div>
             <br>
         </div>
         <div id = 'table' class = 'table'>
             <div id = 'resultsContainer' class = 'results-container'>
-                <div id = "result" class = "result">result</div>
+
                 <br>
-                <div id = "winResult" class = "win-result">winResult</div>
+                <div id = "winResult" class = "win-result"></div>
 
             </div>
 
@@ -98,7 +370,7 @@ session_start();
                     <div id = "boardContentContainer" class = 'board-content-container'>
                       
                      
-                        <div id = 'communityCards' class = 'community-cards'>board</div>
+                        <div id = 'communityCards' class = 'community-cards'></div>
                         <div id = 'communityCardImages' class='community-card-images'>
                             <div class="card-wrapper">
                                 <div id = "card1" class = 'card'></div>
@@ -124,9 +396,13 @@ session_start();
 
             <div id = "hotbar" class="hotbar">
                 <div id="handContainer" class = 'hand-container'>
-                    <span>hand: </span>
-                    <div id = "hand" class = "hand">hand</div>
+
                 </div>
+
+                  <div id = "playerResultContainer">
+                        <div id = "hand" class = "hand"></div>  
+                        <div id = "result" class = "result"></div>
+                    </div>
                 <div id = 'handCardImages' class='hand-card-images'>
                     <div class="card-wrapper">
                         <div id = "handCard1" class = 'card'></div>
@@ -382,10 +658,9 @@ let cardsDealt = [];
 // let balance = 14;
 const balanceText = document.getElementById('balance')
 
-let balance = <?php echo $credits; ?>;
+let balance =  <?php echo $creditsText['credits']; ?>;
+balanceText.innerHTML = `L£${numberWithSpaces(balance)}`;
 
-
-balanceText.innerHTML = `L£${balance}`;
 const button = document.getElementById('temp')
 
 console.log(`balance: ${balance}`)
@@ -505,6 +780,8 @@ let nextButton = document.getElementById('nextButton')
 
 const funnyMusic = new Audio('funnyMusic.mp3');
 
+const form = document.getElementById('balanceForm');//form to submit for php
+
 let ifRaised = false;//checking if the bot or player has raised, if they have, instead of checking the next bot has to call to that value
 function flipCommunityCards(){
 
@@ -592,7 +869,10 @@ function flipCommunityCards(){
             nextButton.style.visibility = 'visible'
             break;
         case 7:
-            let hiders = document.getElementsByClassName('cardHider') //the back card images
+            mainButtons.style.visibility = 'hidden'
+            nextButton.style.visibility = 'visible'
+            
+            let hiders = document.getElementsByClassName('cardHider') //declaring the back card images
 
             for (let i = 0; i < hiders.length; i++){
                 hiders[i].style.display = 'none';
@@ -610,10 +890,15 @@ function flipCommunityCards(){
             checkOppHand()
 
             checkPlayerHand()
+
             checkWhoWins()
 
             
 
+            break;
+        case 8:
+            document.getElementById('storedBalance').value = balance;
+            form.submit();
             break;
         default:
             console.log('bruh error')
@@ -864,25 +1149,25 @@ function checkPlayerHand() {
     // Check for different hand types
     let resultText = '';
     if (checkStraight(wholeHandVals)) {
-        resultText = 'player straight';
+        resultText = 'Straight';
         playerHandValue  = 8;
     } else if (checkFour(wholeHandVals)) {
-        resultText = 'player four of a kind!';
+        resultText = 'Four of a kind!';
         playerHandValue  = 7;
     } else if (checkFull(wholeHandVals)) {
-        resultText = 'player full house!';
+        resultText = 'Full house!';
         playerHandValue  = 6;
     } else if (checkFlush(wholeHandSuites)) {
-        resultText = 'player flush!';
+        resultText = 'Flush!';
         playerHandValue  = 5;
     } else if (checkThree(wholeHandVals)) {
-        resultText = 'player three of a kind!';
+        resultText = 'Three of a kind!';
         playerHandValue  = 4;
     } else if (checkPair(wholeHandVals)) {
-        resultText = checkPair(wholeHandVals) + 'player pairs!';
+        resultText = checkPair(wholeHandVals) + 'pairs!';
         playerHandValue  = checkPair(wholeHandVals);
     } else {
-        resultText = 'player wow you have nothing!';
+        resultText = 'Wow you have nothing!';
         playerHandValue  = 0;
     }
 
@@ -935,19 +1220,19 @@ function checkOppHand(){
     // Check for different hand types
     let resultText = '';
     if (checkStraight(wholeHandVals)) {
-        resultText = 'straight';
+        resultText = 'Straight';
         handValue = 8;
     } else if (checkFour(wholeHandVals)) {
-        resultText = 'four of a kind!';
+        resultText = 'Four of a kind!';
         handValue = 7;
     } else if (checkFull(wholeHandVals)) {
-        resultText = 'full house!';
+        resultText = 'Full house!';
         handValue = 6;
     } else if (checkFlush(wholeHandSuites)) { 
-        resultText = 'flush!';
+        resultText = 'Flush!';
         handValue = 5;
     } else if (checkThree(wholeHandSuites)) {
-        resultText = 'three of a kind!';
+        resultText = 'Three of a kind!';
         handValue = 4;
     } else if (checkPair(wholeHandVals)) {
         resultText = checkPair(wholeHandVals) + ' pairs!';
@@ -955,7 +1240,7 @@ function checkOppHand(){
         // console.log(handValue)
 
     } else {
-        resultText = 'wow they have nothing!';
+        resultText = 'Wow nothing!';
         handValue = 0;
     }
 
@@ -1010,6 +1295,8 @@ function checkOppHand(){
 }
 
 
+
+
 function checkWhoWins(){
     let winner = 'Opponent 3';
     let highestHandValue = opp3HandValue;
@@ -1039,7 +1326,6 @@ function checkWhoWins(){
     
     winResultDiv.innerHTML = `${winner} wins `
 
-    document.getElementById('storedBalance').value = 0;
     switch (winner){
 
         case 'Player':
@@ -1047,6 +1333,8 @@ function checkWhoWins(){
             balance += pot
             balanceText.innerHTML =  (`L£${numberWithSpaces(balance)}`);
             document.getElementById('storedBalance').value = balance;
+
+
             break;
         case 'Opponent 1':
             // alert('Opponent 1')

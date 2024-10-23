@@ -75,7 +75,7 @@ session_start();
             height:100%;
             width:100%;
             overflow:hidden;
-
+            background-color:rgb(20 20 20);
 
         }
 
@@ -100,11 +100,13 @@ session_start();
         .board{
 
             aspect-ratio: 3/2;
-            height:600px;
+            height:900px;
             /* border: 5px solid red; */
             margin:20px;
         /* 
             background-image:url("TableTexture.jpg"); */
+            background-image: url("green_texture_3.jpg");
+            background-size: cover;
         }
         .board-content-container{
             /* border: 5px solid red; */
@@ -127,7 +129,7 @@ session_start();
         }
         .pot-container{
             aspect-ratio: 3/2;
-            height:500px;
+            height:900px;
             display:flex;
             justify-content: center;
             /* border: 3px solid red; */
@@ -169,7 +171,7 @@ session_start();
             position:absolute;
             /* border: 5px solid red; */
             aspect-ratio: 3/2;
-            height: 850px;
+            height: 100%;
 
             display: flex;
             justify-content: center;
@@ -180,13 +182,20 @@ session_start();
             transform: translateX(-50%);
             /* border: 5px solid green; */
             aspect-ratio: 3/2;
-            height: 850px;
+            height: 950px;
             margin-bottom: 80px; /* Space for the hand and results */
-
+            background-image: url("wood_texture_1.png");
 
         }
+        .balance-container{
+            position:absolute;
+        }
         .card{
+            filter:drop-shadow(0px 8px 0px #000000);
+            z-index:0;
+
             box-sizing: border-box;
+
             
             /* margin:5px; */
             /* border: 5px solid green; */
@@ -205,17 +214,11 @@ session_start();
             display:flex;
             flex-direction: row
         }
-        .hand-card-images{
-            /* border: 5px solid green; */
-            height:100px;
-            width:200px;
-            display:flex;
-            flex-direction: row
-        }
+
         .opponent-cards-container{
             position:relative;
             aspect-ratio: 3/2;
-            height: 850px;
+            height: 950px;
             /* border: 5px solid red; */
             display: flex;
             justify-content: center;
@@ -241,6 +244,26 @@ session_start();
         .hand{
             display: flex;
             flex-direction: row
+        }
+        .hand-card-images{
+            position: absolute;
+            bottom: 0;         
+            right: 0;  
+
+             
+            display:flex;
+            flex-direction:row;
+            justify-content: flex-end;
+            padding: 10px;
+            width:500px;
+            /* border: 5px solid red; */
+        }
+
+        .result{
+            order: -1; 
+            position: relative;
+            margin-right: 10px; 
+
         }
 
         #opp1ResultContainer{
@@ -269,6 +292,7 @@ session_start();
             width: 100px;
             height: 140px;
             margin: 5px;
+            z-index:999;
 
         }
         .cardHider{
@@ -276,6 +300,7 @@ session_start();
             height: 140px;
             box-sizing: border-box;
             display:block;
+            z-index:999;
             /* border: 5px solid green; */
 
         }
@@ -332,21 +357,59 @@ session_start();
             /* justify-content: center; */
             flex-direction: column;
         }
+        #pokerImage{
+            position:absolute;
+            z-index:999;
+        }
+        #pokerImageContainer{
+            display:flex;
+            justify-content:center;
+        }
+        #pokingTimeContainer{position:absolute; width:100vw;}
+        #pokingTime{ 
+            position:relative;
+            float:right;
+        }
+
+
+        #madeWithContainer{
+            top:30%;
+            position:absolute;
+            width:500px;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+        }
+    
+
+        #logoutContainer{
+            position: absolute;
+        }
+
+        #playerResultContainer{
+            display:flex;
+            flex-direction:row;
+            
+        }
 
 
 
     </style>
 </head>
 <body>
- <a href = "logout.php">logout</a>
+
 
     <form id="balanceForm" method="post">
         <input type="hidden" id="storedBalance" name="storedBalance" value="">
         <input type="submit" name="button1" value="saveCredits"/>
     </form>
     
-    <div id = 'pageContainer' class = 'page-container'>
-      
+
+    
+        <div id = 'logoutContainer'>
+            <a href = "logout.php">logout</a>
+        </div>
         <div id = 'balanceContainer' class = 'balance-container'>
             <span>balance: </span>
             <div id = "balance" class = "balance"> <?php echo $creditsText['credits']; ?>;</div>
@@ -397,20 +460,10 @@ session_start();
             <div id = "hotbar" class="hotbar">
                 <div id="handContainer" class = 'hand-container'>
 
-                </div>
+             </div>
 
-                  <div id = "playerResultContainer">
-                        <div id = "hand" class = "hand"></div>  
-                        <div id = "result" class = "result"></div>
-                    </div>
-                <div id = 'handCardImages' class='hand-card-images'>
-                    <div class="card-wrapper">
-                        <div id = "handCard1" class = 'card'></div>
-                    </div>
-                    <div class="card-wrapper">
-                        <div id = "handCard2" class = 'card'></div>
-                    </div>
-                </div>
+            
+   
                
             </div>
 
@@ -485,6 +538,24 @@ session_start();
                     </div>
                   
                 </div>
+
+
+                <div id = "playerResultContainer">
+
+                  <div id = 'handCardImages' class='hand-card-images hand'>
+                    <div id = "result" class = "result"></div>
+                    <div class="card-wrapper">
+                        <div id = "handCard1" class = 'card'></div>
+                    </div>
+                    <div class="card-wrapper">
+                        <div id = "handCard2" class = 'card'></div>
+                    </div>
+                </div>
+                       
+                        <div id = "hand" class = "hand"></div>  
+
+                    </div>
+               
             </div>
       
           
@@ -655,7 +726,7 @@ let cardsDealt = [];
 
 
 
-// let balance = 14;
+
 const balanceText = document.getElementById('balance')
 
 let balance =  <?php echo $creditsText['credits']; ?>;
@@ -782,6 +853,22 @@ const funnyMusic = new Audio('funnyMusic.mp3');
 
 const form = document.getElementById('balanceForm');//form to submit for php
 
+const flipCard = new Audio('flipcard.wav')
+const cardDrop = new Audio('carddrop.wav')
+const shortFlip = new Audio('shortFlip.wav')
+const moneySound = new Audio('money_sound.mp3')
+
+
+const knocks = [
+    new Audio('knock_sound_2.wav'),
+    new Audio('knock_sound_3.wav'),
+    new Audio('knock_sound_4.wav'),
+    new Audio('knock_sound_5.wav')
+];
+knocks.forEach(knock => {
+    knock.volume = 0.5; // Set volume to 50%
+});
+
 let ifRaised = false;//checking if the bot or player has raised, if they have, instead of checking the next bot has to call to that value
 function flipCommunityCards(){
 
@@ -790,6 +877,7 @@ function flipCommunityCards(){
     //*function to display the random numbers, this function calls the generateNums() function
     switch(stage){
         case 0:
+
             // console.log('preflop bet')
             for (let i = 0; i < 3; i++) {
                 opponentDecision(i+1)
@@ -800,10 +888,15 @@ function flipCommunityCards(){
         case 1:// Flop
 
             for (let i = 0; i < 3; i++) {
-                const cardDrawn = generateCardForHand('community'); //generates a card for the community hand
-                setCardImage(cardDrawn, i + 1);
+                setTimeout(() => {
+                    const cardDrawn = generateCardForHand('community'); // generates a card for the community hand
+                    setCardImage(cardDrawn, i + 1);
+                            cardDrop.play()
+                 }, 500 * (i + 1)); 
 
             }
+
+
             mainButtons.style.visibility = 'visible'
             nextButton.style.visibility = 'hidden'
             playButton.style.visibility = 'hidden'
@@ -817,9 +910,11 @@ function flipCommunityCards(){
 
             // console.log('flop bet')
             for (let i = 0; i < 3; i++) {
-                opponentDecision(i+1) //call opponent decision three times, each time with a different opponent
+                setTimeout(() => {
+                    opponentDecision(i+1) //call opponent decision three times, each time with a different opponent
+        
+                }, 500 * (i + 1)); 
             }
-
             mainButtons.style.visibility = 'hidden'
             nextButton.style.visibility = 'visible'
             break;
@@ -828,6 +923,8 @@ function flipCommunityCards(){
         case 3: // Turn
             const turnCard = generateCardForHand('community');
             setCardImage(turnCard, 4);
+
+            cardDrop.play()
 
             // console.log('turn')
             opp1ResultDiv.innerHTML = ""
@@ -840,8 +937,11 @@ function flipCommunityCards(){
 
         case 4:
             // console.log('turn bet')
-            for (let i = 0; i < 3; i++) {
-                opponentDecision(i+1)
+           for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    opponentDecision(i+1) //call opponent decision three times, each time with a different opponent
+        
+                }, 500 * (i + 1)); 
             }
 
             
@@ -851,6 +951,9 @@ function flipCommunityCards(){
         case 5: // River
             const riverCard = generateCardForHand('community');
             setCardImage(riverCard, 5);
+
+            cardDrop.play()
+            
             opp1ResultDiv.innerHTML = ""
             opp2ResultDiv.innerHTML = ""
             opp3ResultDiv.innerHTML = ""
@@ -860,8 +963,11 @@ function flipCommunityCards(){
         break;
         case 6:
             // console.log('river bet')
-            for (let i = 0; i < 3; i++) {
-                opponentDecision(i+1)
+           for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    opponentDecision(i+1) //call opponent decision three times, each time with a different opponent
+        
+                }, 500 * (i + 1)); 
             }
 
 
@@ -875,7 +981,13 @@ function flipCommunityCards(){
             let hiders = document.getElementsByClassName('cardHider') //declaring the back card images
 
             for (let i = 0; i < hiders.length; i++){
-                hiders[i].style.display = 'none';
+                 setTimeout(() => {
+                    hiders[i].style.display = 'none';
+                    shortFlip.load();     
+
+                    shortFlip.play();
+
+                 }, 300 * (i + 1)); 
             }
 
             
@@ -885,13 +997,13 @@ function flipCommunityCards(){
             opp2ResultDiv.innerHTML = ""
             opp3ResultDiv.innerHTML = ""
 
-            checkOppHand()
-            checkOppHand()
-            checkOppHand()
+            setTimeout(() => checkOppHand(), 600);  // First call after 0.5 seconds
+            setTimeout(() => checkOppHand(), 1200); // Second call after 1 second
+            setTimeout(() => checkOppHand(), 1800); // Third call after 1.5 seconds
 
-            checkPlayerHand()
+            setTimeout(() => checkPlayerHand(), 2100);
+            setTimeout(() => checkWhoWins(), 2400);
 
-            checkWhoWins()
 
             
 
@@ -1164,7 +1276,7 @@ function checkPlayerHand() {
         resultText = 'Three of a kind!';
         playerHandValue  = 4;
     } else if (checkPair(wholeHandVals)) {
-        resultText = checkPair(wholeHandVals) + 'pairs!';
+        resultText = checkPair(wholeHandVals) + ' pairs!';
         playerHandValue  = checkPair(wholeHandVals);
     } else {
         resultText = 'Wow you have nothing!';
@@ -1173,7 +1285,7 @@ function checkPlayerHand() {
 
     // Display the result and update the pot and balance
     resultDiv.innerHTML = resultText;
-    winResultDiv.innerHTML = `The value of your hand is ${playerHandValue}`;
+    // winResultDiv.innerHTML = `The value of your hand is ${playerHandValue}`;
     
     potDiv.innerHTML = (`L£${pot}`);
     handDiv.innerHTML = balance;
@@ -1290,7 +1402,7 @@ function checkOppHand(){
 
     console.log(oppHandValNum)
     resultDiv.innerHTML = resultText;
-    winResultDiv.innerHTML = `The value of your hand is ${playerHandValue}`;
+    // winResultDiv.innerHTML = `The value of your hand is ${playerHandValue}`;
     // winResultDiv.innerHTML =`The value of opponent ${oppHandValNum}'s hand is ${handValue}`;
 }
 
@@ -1452,6 +1564,8 @@ function opponentDecision(whichOpponent){
             opponentFold1 = true
         }
         if((randNum > 1 && randNum <50)){//*CHECKING/CALLING------------
+            const randomIndex = Math.floor(Math.random() * knocks.length);
+            knocks[randomIndex].play();//plyay a random knock
             // console.log(`opponent ${1} checked`)
 
             opp1ResultDiv.innerHTML = 'checked'
@@ -1459,6 +1573,7 @@ function opponentDecision(whichOpponent){
 
         }
         if((randNum >= 50 && randNum <100)){ //*RASING----------
+            moneySound.play()
             // console.log(`opponent ${1} raised`)
             botRaise(botBalance1) //raise with the first bot's balance
             botBalance1 -= botRaise(botBalance1);
@@ -1478,17 +1593,22 @@ function opponentDecision(whichOpponent){
 
     if(whichOpponent===2 && opponentFold2 === false){
         if(randNum === 0){//*FOLDING---------
+        
             // console.log(`opponent ${2} folded`)
             opp2ResultDiv.innerHTML = 'folded'
             opponentFold2 = true
         }
         if((randNum > 1 && randNum <50)){//*CHECKING/CALLING----------
+            const randomIndex = Math.floor(Math.random() * knocks.length);
+            knocks[randomIndex].play();//plyay a random knock
+
             // console.log(`opponent ${2} checked`)
 
             opp2ResultDiv.innerHTML = 'checked'
    
         }
         if((randNum >= 50 && randNum <100)){//*RASING-----------
+            moneySound.play()
             // console.log(`opponent ${2} raised`)
             botRaise(botBalance2) //raise with the second bot's balance
 
@@ -1510,12 +1630,15 @@ function opponentDecision(whichOpponent){
             opponentFold3 = true
         }
         if((randNum > 1 && randNum <50)){//*CHECKING/CALLING-----------
+            const randomIndex = Math.floor(Math.random() * knocks.length);
+            knocks[randomIndex].play();//plyay a random knock
             // console.log(`opponent ${3} checked`)
 
             opp3ResultDiv.innerHTML = 'checked'
 
         }
         if((randNum >= 50 && randNum <100)){//*RASING------------
+            moneySound.play()
             // console.log(`opponent ${3} raised`)
             botRaise(botBalance3) //raise with the third bot's balance
             botBalance3 -= botRaise(botBalance3);

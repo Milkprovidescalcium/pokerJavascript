@@ -70,8 +70,12 @@ session_start();
     <title>Texas Hold em!</title>
     <!--<link rel="stylesheet" href="styles.css">-->
     <style>
+    
+        @import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Work+Sans:ital,wght@0,100..900;1, 100..900&display=swap');
 
         body{
+            font-family: 'Poppins', sans-serif;
             height:100%;
             width:100%;
             overflow:hidden;
@@ -392,8 +396,18 @@ session_start();
             flex-direction:row;
             
         }
+        #pot{
+            font-size:40px;
+            font-weight:bold;
+            text-shadow: 3px 0 #000, -2px 0 #000, 0 3px #000, 0 -3px #000,
+            2px 2px #000, -2px -2px #000, 2px -2px #000, -2px 2px #000;
 
-
+            color:rgb(255 255 255);
+        }
+        #potContainer{
+            margin:20px;
+        }
+    
 
     </style>
 </head>
@@ -412,7 +426,9 @@ session_start();
         </div>
         <div id = 'balanceContainer' class = 'balance-container'>
             <span>balance: </span>
-            <div id = "balance" class = "balance"> <?php echo $creditsText['credits']; ?>;</div>
+            <div id = "balance" class = "balance"> 
+                <?php echo  "<span class='balance-text' style = \"font-size:40px; \">" . $creditsText['credits'] .  "</span>"; ?>
+            </div>
             <br>
         </div>
         <div id = 'table' class = 'table'>
@@ -426,7 +442,6 @@ session_start();
             <div id = 'boardContainer' class = 'board-container'>
                 <div id = "board" class = "board">
                     <div id="potContainer" class = 'pot-container'>
-                        <span>pot: &nbsp</span>
                         <div id = "pot" class = "pot">L£0</div>
 
                     </div>
@@ -1185,7 +1200,7 @@ function checkPair(wholeHandVals, excludeVal = null) {
             }
         }
     }
-    console.log(countedPairs)
+    // console.log(countedPairs)
     return pairNum;
 
 }
@@ -1353,7 +1368,7 @@ function checkOppHand(){
 
     } else {
         resultText = 'Wow nothing!';
-        handValue = 0;
+        handValue = 0.5;
     }
 
 
@@ -1398,9 +1413,9 @@ function checkOppHand(){
 
     }
 
-  
 
-    console.log(oppHandValNum)
+
+    // console.log(oppHandValNum)
     resultDiv.innerHTML = resultText;
     // winResultDiv.innerHTML = `The value of your hand is ${playerHandValue}`;
     // winResultDiv.innerHTML =`The value of opponent ${oppHandValNum}'s hand is ${handValue}`;
@@ -1409,25 +1424,99 @@ function checkOppHand(){
 
 
 
+
+function highCard(array){//function takes the winners array (for less confusion)
+    console.log(`Tie between: ${winners.join(', ')}`)
+    console.log(array)
+
+    // console.log(oppHandVals1)
+    // console.log(oppHandVals2)
+    // console.log(oppHandVals3)
+    // console.log(handVals)
+
+    // console.log(`opp1 sum: ${getSum(oppHandVals1)}`)
+    // console.log(`opp2 sum: ${getSum(oppHandVals2)}`)
+    // console.log(`opp3 sum: ${getSum(oppHandVals3)}`)
+    // console.log(`handVals sum: ${getSum(handVals)}`)
+
+    let highestCards = {};
+
+    array.forEach(winner => { //looping thtough all the winners, and adding the highest card in their hand to the highestCards object
+        if (winner === 'Opponent 1') {
+            highestCards[winner] = getHighestCard(oppHandVals1);
+        } else if (winner === 'Opponent 2') {
+            highestCards[winner] = getHighestCard(oppHandVals2);
+        } else if (winner === 'Opponent 3') {
+            highestCards[winner] = getHighestCard(oppHandVals3);
+        } else if (winner === 'Player') {
+            highestCards[winner] = getHighestCard(handVals);
+        }
+    });
+    console.log('Highest cards:', highestCards);
+
+    let highestCardValue = Math.max(...Object.values(highestCards));
+
+    console.log(highestCardValue)
+    let finalWinners = Object.keys(highestCards).filter(player => highestCards[player] === highestCardValue); //takes the key that belongs to the highest value in the highestCards object
+
+    if (finalWinners.length > 1) {
+        winResultDiv.innerHTML = `It's still a tie between: ${finalWinners.join(', ')}`;
+        highCard(finalWinners)
+    } else {
+        winResultDiv.innerHTML = `The winner is: ${finalWinners[0]} by high card ${highestCardValue}`;
+    }
+
+}
+// Function that calculates the sum of an array's values (I stole it)(also I'm not using this function anymore)
+function getSum(arr) {
+    return arr.reduce((a, b) => a + b, 0);
+}
+// Function that calculates the highest of an array's values (I stole it)
+function getHighestCard(arr) {
+    return Math.max(...arr);  // Returns the highest value in the array
+    //...arr lets use use an array in math.max function, since normally it CANT do that
+}
+
+
+let winners = [];
 function checkWhoWins(){
-    let winner = 'Opponent 3';
+
+
+    winners.push('Opponent 3'); //opponent three is default winner
+
+    // let winner = 'Opponent 3';
     let highestHandValue = opp3HandValue;
 
+    //opp1
     if (opp1HandValue > highestHandValue) {
-        winner = 'Opponent 1';
+        winners = ['Opponent 1']; //reset the array, ONLY ONE WINNER
         highestHandValue = opp1HandValue;
 
-    }
-    if (opp2HandValue > highestHandValue) {
-        winner = 'Opponent 2';
-        highestHandValue = opp2HandValue;
+    }else if (opp1HandValue === highestHandValue){
+        winners.push('Opponent 1');
 
     }
+    //opp2
+    if (opp2HandValue > highestHandValue) {
+        winners = ['Opponent 2'];
+        highestHandValue = opp2HandValue;
+    }else if (opp2HandValue === highestHandValue){
+        winners.push('Opponent 2');
+
+    }
+    //opp3
     if (playerHandValue > highestHandValue) {
-        winner = 'Player';
+        winners = ['Player'];
         highestHandValue = playerHandValue;
 
+    }else if (playerHandValue === highestHandValue){
+        winners.push('Player');
+
     }
+    // console.log(winners)
+
+
+
     let botBalance1 = 1000000;
     let botBalance2 = 1000000;
     let botBalance3 = 1000000;
@@ -1436,9 +1525,14 @@ function checkWhoWins(){
     const opp2BalanceText =document.getElementById('opp2BalanceValue')
     const opp3BalanceText =document.getElementById('opp3BalanceValue')
     
-    winResultDiv.innerHTML = `${winner} wins `
+    if (winners.length > 1) {//there is a tie
+        highCard(winners) //tiebreak with highcard
+    } else {
+        winResultDiv.innerHTML = (`The winner is: ${winners[0]}`);
+    }
+    // winResultDiv.innerHTML = `${winner} wins `
 
-    switch (winner){
+    switch (winners[0]){
 
         case 'Player':
             // alert('player')
@@ -1730,6 +1824,10 @@ function next(){
 //Oct-17-2024-----DONE
 //!PROBLEM, Flushes don't work!
 //*SOLUTION: Fix flushes! Maybe make a set to store the pair and the three as seperate values?
+
+//Oct-23-2024-----
+//!PROBLEM, Aaron said my game is bad, because there is no high card. That is valid.
+//*SOLUTION: Program high card!
 </script>
 
 </body>

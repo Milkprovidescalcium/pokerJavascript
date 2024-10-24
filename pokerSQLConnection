@@ -105,11 +105,11 @@ session_start();
 
             aspect-ratio: 3/2;
             height:900px;
-            /* border: 5px solid red; */
+             border: 5px solid rgb(22, 22, 22);
             margin:20px;
         /* 
             background-image:url("TableTexture.jpg"); */
-            background-image: url("green_texture_3.jpg");
+            background-image: url("green_texture_4.avif");
             background-size: cover;
         }
         .board-content-container{
@@ -188,14 +188,15 @@ session_start();
             aspect-ratio: 3/2;
             height: 950px;
             margin-bottom: 80px; /* Space for the hand and results */
-            background-image: url("wood_texture_1.png");
+            background-image: url("wood_texture_2.jpg");
 
         }
         .balance-container{
             position:absolute;
         }
         .card{
-            filter:drop-shadow(0px 8px 0px #000000);
+
+            box-shadow: 0 1px 10px rgba(0, 0, 0, 0.5);
             z-index:0;
 
             box-sizing: border-box;
@@ -274,12 +275,14 @@ session_start();
             display: flex;
             /* justify-content: center; */
             flex-direction: column;
+            align-items:center;
 
             /* border: 5px solid red; */
         }
         #opp2ResultContainer{
             display: flex;
             /* justify-content: center; */
+            align-items:center;
             flex-direction: column;
 
             /* border: 5px solid red; */
@@ -287,6 +290,7 @@ session_start();
         #opp3ResultContainer{
             display: flex;
             /* justify-content: center; */
+            align-items:center;
             flex-direction: column;
             /* border: 5px solid red; */
             
@@ -407,7 +411,72 @@ session_start();
         #potContainer{
             margin:20px;
         }
+        #innerPlayerResultContainer{
+            /* border: 5px solid green; */
+        }
+        .balance{
+   
+        }
+        .red-bg{
+
+            border: 2px solid black;
+            background-color: rgb(212, 49, 26);
+            padding:5px;
+            width:125px;
+            text-align:center;
+
+            border-radius: 5px;
+
+            font-size:20px;
+            font-weight:bold;
+            color:rgb(255 255 255);
+
+            box-shadow: 0 1px 10px rgba(0, 0, 0, 0.5);
+            z-index:99;
+        }
     
+        .name{
+            border-left: 2px solid black;  
+            border-right: 2px solid black; 
+            border-bottom: 2px solid black; 
+            border-top: none;   
+
+            padding:5px;
+            border-bottom-left-radius: 5px;  
+            border-bottom-right-radius: 5px; 
+            width:125px;
+            text-align:center;
+
+            font-size:15px;
+            font-weight:bold;
+            color:rgb(0 0 0);
+            background-color: rgb(163, 162, 162);
+        }
+        .player-name{
+            border-left: 2px solid black;  
+            border-right: 2px solid black; 
+            border-bottom: 2px solid black; 
+            border-top: none;   
+
+            padding:5px;
+            border-bottom-left-radius: 5px;  
+            border-bottom-right-radius: 5px; 
+            min-width:50px;
+            text-align:center;
+
+            font-size:15px;
+            font-weight:bold;
+            color:rgb(0 0 0);
+            background-color: rgb(255, 213, 15);
+
+            z-index:1;
+        }
+        #card1{visibility: hidden}
+        #card2{visibility: hidden}
+        #card3{visibility: hidden}
+        #card4{visibility: hidden}
+        #card5{visibility: hidden}
+
 
     </style>
 </head>
@@ -425,10 +494,7 @@ session_start();
             <a href = "logout.php">logout</a>
         </div>
         <div id = 'balanceContainer' class = 'balance-container'>
-            <span>balance: </span>
-            <div id = "balance" class = "balance"> 
-                <?php echo  "<span class='balance-text' style = \"font-size:40px; \">" . $creditsText['credits'] .  "</span>"; ?>
-            </div>
+          
             <br>
         </div>
         <div id = 'table' class = 'table'>
@@ -501,8 +567,9 @@ session_start();
                         <div id = "opponent1Card2" class = 'card'></div>
                     </div>
                     <div id = "opp1ResultContainer">
-                        <div id="opp1Balance">Balance:</div>
-                        <div id="opp1BalanceValue">0</div>
+      
+                        <div id="opp1BalanceValue" class = 'red-bg'>0</div>
+                        <div id = "opp1Name"class = 'name'>Dallas</div>
                         <div id="opp1Result"></div> 
                     </div>
                 </div>
@@ -523,9 +590,10 @@ session_start();
                     <div class="card-wrapper">
                         <div id = "opponent2Card2" class = 'card'></div>
                     </div>
-                    <div id = "opp2ResultContainer">
-                        <div id="opp2Balance">Balance:</div>
-                        <div id="opp2BalanceValue">0</div>
+                    <div id = "opp2ResultContainer" >
+  
+                        <div id="opp2BalanceValue" class = 'red-bg'>0</div>
+                        <div id = "opp2Name"class = 'name'>G-Money</div>
                         <div id="opp2Result"></div>
                     </div>
 
@@ -540,9 +608,10 @@ session_start();
                             <img class = "cardHider" src = 'light/BACK.png'>
                         </div>
                     </div>
-                    <div id = "opp3ResultContainer">
-                        <div id="opp3Balance">Balance:</div>
-                        <div id="opp3BalanceValue">0</div>
+                    <div id = "opp3ResultContainer" >
+
+                        <div id="opp3BalanceValue" class = 'red-bg'>0</div>
+                        <div id = "opp3Name"class = 'name'>Gary</div>
                         <div id="opp3Result"></div>
                     </div>
                     <div class="card-wrapper">
@@ -558,7 +627,14 @@ session_start();
                 <div id = "playerResultContainer">
 
                   <div id = 'handCardImages' class='hand-card-images hand'>
-                    <div id = "result" class = "result"></div>
+                    <div id = 'innerPlayerResultContainer'>
+
+                        <div id = "balance" class = "balance red-bg" > 
+                            <?php echo $creditsText['credits'] ?>
+                        </div>
+                        <div id = 'playerName' class = 'player-name'>You</div>
+                        <div id = "result" class = "result"></div>
+                    </div>
                     <div class="card-wrapper">
                         <div id = "handCard1" class = 'card'></div>
                     </div>
@@ -777,7 +853,7 @@ function generateRandNums(max){
 
 
 function numberWithSpaces(x) { //this function adds spaces to big numbers, like turning 1000000 into 1 000 000
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 
@@ -884,9 +960,20 @@ knocks.forEach(knock => {
     knock.volume = 0.5; // Set volume to 50%
 });
 
+//all the community cards
+
+const commCardsArray = [
+    card1 = document.getElementById('card1'),
+    card2 = document.getElementById('card2'),
+    card3 = document.getElementById('card3'),
+    card4 = document.getElementById('card4'),
+    card5 = document.getElementById('card5')
+]
+
+
 let ifRaised = false;//checking if the bot or player has raised, if they have, instead of checking the next bot has to call to that value
 function flipCommunityCards(){
-
+console.log(commCardsArray)
 
     // console.log(cardsDealt)
     //*function to display the random numbers, this function calls the generateNums() function
@@ -905,6 +992,7 @@ function flipCommunityCards(){
             for (let i = 0; i < 3; i++) {
                 setTimeout(() => {
                     const cardDrawn = generateCardForHand('community'); // generates a card for the community hand
+                    commCardsArray[i].style.visibility = 'visible'
                     setCardImage(cardDrawn, i + 1);
                             cardDrop.play()
                  }, 500 * (i + 1)); 
@@ -937,6 +1025,7 @@ function flipCommunityCards(){
             
         case 3: // Turn
             const turnCard = generateCardForHand('community');
+            commCardsArray[3].style.visibility = 'visible'
             setCardImage(turnCard, 4);
 
             cardDrop.play()
@@ -965,6 +1054,7 @@ function flipCommunityCards(){
             break;
         case 5: // River
             const riverCard = generateCardForHand('community');
+            commCardsArray[4].style.visibility = 'visible'
             setCardImage(riverCard, 5);
 
             cardDrop.play()
@@ -999,7 +1089,6 @@ function flipCommunityCards(){
                  setTimeout(() => {
                     hiders[i].style.display = 'none';
                     shortFlip.load();     
-
                     shortFlip.play();
 
                  }, 300 * (i + 1)); 
@@ -1019,6 +1108,10 @@ function flipCommunityCards(){
             setTimeout(() => checkPlayerHand(), 2100);
             setTimeout(() => checkWhoWins(), 2400);
 
+            setTimeout(() => {
+                pot = 0;  // Reset pot to 0
+                potDiv.innerHTML = `L£${pot}`; 
+            }, 2700);
 
             
 
@@ -1294,7 +1387,7 @@ function checkPlayerHand() {
         resultText = checkPair(wholeHandVals) + ' pairs!';
         playerHandValue  = checkPair(wholeHandVals);
     } else {
-        resultText = 'Wow you have nothing!';
+        resultText = 'Wow nothing!';
         playerHandValue  = 0;
     }
 
@@ -1440,30 +1533,40 @@ function highCard(array){//function takes the winners array (for less confusion)
     // console.log(`handVals sum: ${getSum(handVals)}`)
 
     let highestCards = {};
+    let sums = {}
 
     array.forEach(winner => { //looping thtough all the winners, and adding the highest card in their hand to the highestCards object
         if (winner === 'Opponent 1') {
             highestCards[winner] = getHighestCard(oppHandVals1);
+            sums[winner] = getSum(oppHandVals1);
         } else if (winner === 'Opponent 2') {
             highestCards[winner] = getHighestCard(oppHandVals2);
+            sums[winner] = getSum(oppHandVals2);
         } else if (winner === 'Opponent 3') {
             highestCards[winner] = getHighestCard(oppHandVals3);
+            sums[winner] = getSum(oppHandVals3);
         } else if (winner === 'Player') {
             highestCards[winner] = getHighestCard(handVals);
+            sums[winner] = getSum(handVals);
         }
     });
     console.log('Highest cards:', highestCards);
+    console.log('Sums :', sums);
 
     let highestCardValue = Math.max(...Object.values(highestCards));
+    let highestCardSum = Math.max(...Object.values(sums));
+
 
     console.log(highestCardValue)
-    let finalWinners = Object.keys(highestCards).filter(player => highestCards[player] === highestCardValue); //takes the key that belongs to the highest value in the highestCards object
+    // let finalWinners = Object.keys(highestCards).filter(player => highestCards[player] === highestCardValue); //takes the key that belongs to the highest value in the highestCards object
+    let finalFinalWinners = Object.keys(sums).filter(player => sums[player] === highestCardSum); //Grabs the highest sum of values
+     
 
-    if (finalWinners.length > 1) {
-        winResultDiv.innerHTML = `It's still a tie between: ${finalWinners.join(', ')}`;
-        highCard(finalWinners)
+    if (finalFinalWinners.length > 1) {
+        winResultDiv.innerHTML = `It's still a tie between: ${finalFinalWinners.join(', ')}`;
+
     } else {
-        winResultDiv.innerHTML = `The winner is: ${finalWinners[0]} by high card ${highestCardValue}`;
+        winResultDiv.innerHTML = `The winner is: ${finalFinalWinners[0]} by high card ${highestCardValue}`;
     }
 
 }
@@ -1561,8 +1664,7 @@ function checkWhoWins(){
             break;
 
     }
-    pot = 0;
-    potDiv.innerHTML = (`L£${pot}`);
+
  
 }
 
@@ -1659,6 +1761,7 @@ function opponentDecision(whichOpponent){
         }
         if((randNum > 1 && randNum <50)){//*CHECKING/CALLING------------
             const randomIndex = Math.floor(Math.random() * knocks.length);
+            knocks[randomIndex].load();
             knocks[randomIndex].play();//plyay a random knock
             // console.log(`opponent ${1} checked`)
 
@@ -1694,6 +1797,7 @@ function opponentDecision(whichOpponent){
         }
         if((randNum > 1 && randNum <50)){//*CHECKING/CALLING----------
             const randomIndex = Math.floor(Math.random() * knocks.length);
+            knocks[randomIndex].load();
             knocks[randomIndex].play();//plyay a random knock
 
             // console.log(`opponent ${2} checked`)
@@ -1725,6 +1829,7 @@ function opponentDecision(whichOpponent){
         }
         if((randNum > 1 && randNum <50)){//*CHECKING/CALLING-----------
             const randomIndex = Math.floor(Math.random() * knocks.length);
+            knocks[randomIndex].load();
             knocks[randomIndex].play();//plyay a random knock
             // console.log(`opponent ${3} checked`)
 
@@ -1830,6 +1935,10 @@ function next(){
 //*SOLUTION: Program high card!
 //*Make an array that stores all winners? And if theres more than one winner, go to function that decides high card
 //*Grab the highest card from each of the players, and see who's the highest
+
+//Oct-23-2024------
+//!PROBLEM, High cards only evaluate in pairs if the high card is higher than the pair.
+//*Solution, make the high card logic evaluate the sum of the hand instead of the highest card in the hand
 </script>
 
 </body>

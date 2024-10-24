@@ -1358,7 +1358,7 @@ function checkOppHand(){
     } else if (checkFlush(wholeHandSuites)) { 
         resultText = 'Flush!';
         handValue = 5;
-    } else if (checkThree(wholeHandSuites)) {
+    } else if (checkThree(wholeHandVals)) {
         resultText = 'Three of a kind!';
         handValue = 4;
     } else if (checkPair(wholeHandVals)) {
@@ -1825,9 +1825,11 @@ function next(){
 //!PROBLEM, Flushes don't work!
 //*SOLUTION: Fix flushes! Maybe make a set to store the pair and the three as seperate values?
 
-//Oct-23-2024-----
+//Oct-23-2024-----DONE
 //!PROBLEM, Aaron said my game is bad, because there is no high card. That is valid.
 //*SOLUTION: Program high card!
+//*Make an array that stores all winners? And if theres more than one winner, go to function that decides high card
+//*Grab the highest card from each of the players, and see who's the highest
 </script>
 
 </body>

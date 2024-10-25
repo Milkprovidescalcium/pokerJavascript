@@ -69,6 +69,7 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Texas Hold em!</title>
     <!--<link rel="stylesheet" href="styles.css">-->
+    <link rel="icon" type="image/x-icon" href="poker_favicon.png">
     <style>
     
         @import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
@@ -80,6 +81,7 @@ session_start();
             width:100%;
             overflow:hidden;
             background-color:rgb(20 20 20);
+            display:none;
 
         }
 
@@ -268,6 +270,7 @@ session_start();
             order: -1; 
             position: relative;
             margin-right: 10px; 
+            text-align:center;
 
         }
 
@@ -340,7 +343,11 @@ session_start();
 
 
         .raise-container{
-            display:none;
+            position: relative;
+            display:flex;
+            align-items:center;
+            z-index:1;
+            width:25%;
         }
         .play-button{
             visibility: visible;
@@ -349,6 +356,8 @@ session_start();
             visibility: hidden;
         }
         .mainButtonsContainer{
+            position:absolute;
+            z-index:999;
             width:100%;
             display:flex;
             align-items: center;
@@ -413,6 +422,11 @@ session_start();
         }
         #innerPlayerResultContainer{
             /* border: 5px solid green; */
+            display: flex;
+  
+            flex-direction: column;
+            align-items: center;
+            /* border: 5px solid red; */
         }
         .balance{
    
@@ -461,7 +475,7 @@ session_start();
             padding:5px;
             border-bottom-left-radius: 5px;  
             border-bottom-right-radius: 5px; 
-            min-width:50px;
+            width:125px;
             text-align:center;
 
             font-size:15px;
@@ -477,6 +491,93 @@ session_start();
         #card4{visibility: hidden}
         #card5{visibility: hidden}
 
+        .results{/*general style for hand results*/
+            text-align: center;
+            font-size:20px;
+            font-weight:bold;
+            text-shadow: 2px 0 #000, -1px 0 #000, 0 2px #000, 0 -2px #000,
+            1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000;
+
+            color:rgb(255 255 255);
+        }
+        .results-wrapper{
+            margin:20px;
+            overflow: hidden; 
+        }
+        .result-container{
+            /* border: 5px solid green; */
+            width:160px;
+            z-index:999;
+        }
+        .win-result{
+            z-index:999;
+            text-align: center;
+            font-size:30px;
+            font-weight:bold;
+            text-shadow: 3px 0 #000, -2px 0 #000, 0 3px #000, 0 -3px #000,
+            2px 2px #000, -2px -2px #000, 2px -2px #000, -2px 2px #000;
+
+            color:rgb(255 255 255);
+
+      
+            transform: translateY(-100%); 
+        }
+
+        @keyframes slideDown  {
+            from {
+                transform: translateY(-100%); /* Start from above */
+                opacity: 0; /* Start invisible */
+            }
+            to {
+                transform: translateY(0); /* End in place */
+                opacity: 1; /* End fully visible */
+            }
+        }
+
+      
+        .raise-num {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 20px;
+        background: #d3d3d3;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+        }
+
+        .raise-num:hover {
+        opacity: 1;
+        }
+
+        .raise-num::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 25px;
+        background: #04AA6D;
+        cursor: pointer;
+        }
+
+        .raise-num::-moz-range-thumb {
+        width: 20px;
+        height: 25px;
+        background: #04AA6D;
+        cursor: pointer;
+        }
+        .play-button{
+            position:absolute;
+            z-index:999;
+        }
+        #sliderValue{
+            position: absolute; /* Position the value text absolutely */
+            bottom: 30px; /* Position it above the slider */
+            left: 50%; /* Center it horizontally */
+            transform: translateX(-50%); /* Adjust to center */
+            font-size: 20px;
+            color: #000;
+            transition: left 0.1s; /* Smooth movement */
+        }
 
     </style>
 </head>
@@ -501,7 +602,7 @@ session_start();
             <div id = 'resultsContainer' class = 'results-container'>
 
                 <br>
-                <div id = "winResult" class = "win-result"></div>
+                <div id = "winResult" class = "win-result">hi</div>
 
             </div>
 
@@ -566,11 +667,14 @@ session_start();
                     <div class="card-wrapper">
                         <div id = "opponent1Card2" class = 'card'></div>
                     </div>
-                    <div id = "opp1ResultContainer">
+                    <div id = "opp1ResultContainer" class = 'result-container'>
       
                         <div id="opp1BalanceValue" class = 'red-bg'>0</div>
                         <div id = "opp1Name"class = 'name'>Dallas</div>
-                        <div id="opp1Result"></div> 
+                        <div class="result-wrapper">
+                            <div id="opp1Result" class = 'results'></div> 
+                        </div>
+
                     </div>
                 </div>
 
@@ -590,11 +694,13 @@ session_start();
                     <div class="card-wrapper">
                         <div id = "opponent2Card2" class = 'card'></div>
                     </div>
-                    <div id = "opp2ResultContainer" >
+                    <div id = "opp2ResultContainer"class = 'result-container'>
   
                         <div id="opp2BalanceValue" class = 'red-bg'>0</div>
                         <div id = "opp2Name"class = 'name'>G-Money</div>
-                        <div id="opp2Result"></div>
+                        <div class="result-wrapper">
+                            <div id="opp2Result" class = 'results'></div> 
+                        </div>
                     </div>
 
                 </div>
@@ -608,11 +714,13 @@ session_start();
                             <img class = "cardHider" src = 'light/BACK.png'>
                         </div>
                     </div>
-                    <div id = "opp3ResultContainer" >
+                    <div id = "opp3ResultContainer" class = 'result-container'>
 
                         <div id="opp3BalanceValue" class = 'red-bg'>0</div>
                         <div id = "opp3Name"class = 'name'>Gary</div>
-                        <div id="opp3Result"></div>
+                        <div class="result-wrapper">
+                            <div id="opp3Result" class = 'results'></div> 
+                        </div>
                     </div>
                     <div class="card-wrapper">
                         <div id = "opponent3Card1" class = 'card'></div>
@@ -627,13 +735,16 @@ session_start();
                 <div id = "playerResultContainer">
 
                   <div id = 'handCardImages' class='hand-card-images hand'>
-                    <div id = 'innerPlayerResultContainer'>
+                    <div id = 'innerPlayerResultContainer'class = 'result-container'>
 
                         <div id = "balance" class = "balance red-bg" > 
                             <?php echo $creditsText['credits'] ?>
                         </div>
                         <div id = 'playerName' class = 'player-name'>You</div>
-                        <div id = "result" class = "result"></div>
+
+                        <div class="result-wrapper">
+                            <div id = "result" class = "result results"></div>
+                        </div>
                     </div>
                     <div class="card-wrapper">
                         <div id = "handCard1" class = 'card'></div>
@@ -651,26 +762,20 @@ session_start();
       
           
             <div id = 'buttonContainer' class = 'button-container'>
-                <!-- temp buttons -->
-                <!-- 
-                <button onclick="dealPlayerHand()"type = "button" id = "dealButton">deal</button>
-                <button onclick="bet()"type = "button" id = "betButton">bet</button>
-                <button onclick="checkPlayerHand()"type = "button" id = "checkHand">No more action!</button>
-                <button onclick="opponentDeal()"type = "button" id = "opponentDeal">opponentDeal</button>
-                <button onclick="checkOppHand()"type = "button" id = "checkOppHand">checkOppHand</button>
-                <button onclick="checkWhoWins()"type = "button" id = "checkWhoWins">checkWhoWins</button> -->
-                <!-- <button onclick="flipCommunityCards()"type = "button" id = "flipButton">flip</button> -->
-                
+       
                 <div class="mainButtonsContainer">
                     <button onclick="playerFold()"type = "button" id = "foldButton" class = 'fold-button'>fold</button>
                     <button onclick="check()"type = "button" id = "checkButton" class = 'check-button'>check</button>
                     
                     <button onclick="raise()"type = "button" id = "raiseButton" class = 'raise-button'>raise</button>
-                    <div id = "raiseContainer" class = 'raise-container'>
-                        <input type = "text" id = "howMuchRaise" class = 'how-much-raise'>how much?</input>
-                        <button onclick="submitRaise()"type = "button" id = "submitRaiseButton" class = 'submit-raise-button'>submit</button>
-                    </div>
+                 
                 </div>
+                <div id = "raiseContainer" class = 'raise-container'>
+                        <button onclick="exitRaise()"type = "button" id = "exitRaiseButton" class = 'exit-raise-button'>exit</button>
+                        <span id="sliderValue">50</span>
+                        <input type="range" min="1" max="100" value="50" class="raise-num" id="raiseNum">
+                        <button onclick="submitRaise()"type = "button" id = "submitRaiseButton" class = 'submit-raise-button'>Ok</button>
+                 </div>
                 <button onclick="play()"type = "button" id = "playButton" class = 'play-button'>play</button>
                 <button onclick="next()"type = "button" id = "nextButton" class = 'next-button'>next</button>
              
@@ -688,7 +793,16 @@ session_start();
     -->
     
 
-<script> //? for the river:
+<script> 
+document.addEventListener("DOMContentLoaded", function() {
+    document.body.style.display = 'block'; // Show body after styles are loaded
+});
+
+
+
+
+
+//? for the river:
 //? create three radnom numbers (flop)
 //? then one more (turn) and then the last one (river)
 
@@ -970,6 +1084,9 @@ const commCardsArray = [
     card5 = document.getElementById('card5')
 ]
 
+const rangeSlider = document.getElementById('raiseNum');
+rangeSlider.max = balance;
+const sliderValueDisplay = document.getElementById('sliderValue');
 
 let ifRaised = false;//checking if the bot or player has raised, if they have, instead of checking the next bot has to call to that value
 function flipCommunityCards(){
@@ -992,18 +1109,18 @@ console.log(commCardsArray)
             for (let i = 0; i < 3; i++) {
                 setTimeout(() => {
                     const cardDrawn = generateCardForHand('community'); // generates a card for the community hand
-                    commCardsArray[i].style.visibility = 'visible'
                     setCardImage(cardDrawn, i + 1);
-                            cardDrop.play()
+                    commCardsArray[i].style.visibility = 'visible'
+                    cardDrop.play()
                  }, 500 * (i + 1)); 
 
             }
-
-
-            mainButtons.style.visibility = 'visible'
-            nextButton.style.visibility = 'hidden'
-            playButton.style.visibility = 'hidden'
-
+                nextButton.style.visibility = 'hidden'
+                playButton.style.visibility = 'hidden'
+                setTimeout(() => {
+                    mainButtons.style.visibility = 'visible'
+                 }, 2000); 
+     
             opp1ResultDiv.innerHTML = ""
             opp2ResultDiv.innerHTML = ""
             opp3ResultDiv.innerHTML = ""
@@ -1016,17 +1133,19 @@ console.log(commCardsArray)
                 setTimeout(() => {
                     opponentDecision(i+1) //call opponent decision three times, each time with a different opponent
         
-                }, 500 * (i + 1)); 
+                }, 600 * (i + 1)); 
             }
-            mainButtons.style.visibility = 'hidden'
-            nextButton.style.visibility = 'visible'
+                mainButtons.style.visibility = 'hidden'
+                setTimeout(() => {
+                    nextButton.style.visibility = 'visible'
+                 }, 2400); 
             break;
 
             
         case 3: // Turn
             const turnCard = generateCardForHand('community');
-            commCardsArray[3].style.visibility = 'visible'
             setCardImage(turnCard, 4);
+            commCardsArray[3].style.visibility = 'visible'
 
             cardDrop.play()
 
@@ -1045,17 +1164,18 @@ console.log(commCardsArray)
                 setTimeout(() => {
                     opponentDecision(i+1) //call opponent decision three times, each time with a different opponent
         
-                }, 500 * (i + 1)); 
+                }, 600 * (i + 1)); 
             }
+                mainButtons.style.visibility = 'hidden'
+                setTimeout(() => {
+                    nextButton.style.visibility = 'visible'
+                 }, 2400); 
 
-            
-            mainButtons.style.visibility = 'hidden'
-            nextButton.style.visibility = 'visible'
             break;
         case 5: // River
             const riverCard = generateCardForHand('community');
-            commCardsArray[4].style.visibility = 'visible'
             setCardImage(riverCard, 5);
+            commCardsArray[4].style.visibility = 'visible'
 
             cardDrop.play()
             
@@ -1063,8 +1183,10 @@ console.log(commCardsArray)
             opp2ResultDiv.innerHTML = ""
             opp3ResultDiv.innerHTML = ""
 
-            mainButtons.style.visibility = 'visible'
             nextButton.style.visibility = 'hidden'
+
+            mainButtons.style.visibility = 'visible'
+
         break;
         case 6:
             // console.log('river bet')
@@ -1072,29 +1194,35 @@ console.log(commCardsArray)
                 setTimeout(() => {
                     opponentDecision(i+1) //call opponent decision three times, each time with a different opponent
         
-                }, 500 * (i + 1)); 
+                }, 600 * (i + 1)); 
             }
 
-
             mainButtons.style.visibility = 'hidden'
-            nextButton.style.visibility = 'visible'
+            setTimeout(() => {
+                nextButton.style.visibility = 'visible'
+            }, 2400); 
             break;
         case 7:
-            mainButtons.style.visibility = 'hidden'
-            nextButton.style.visibility = 'visible'
+
             
             let hiders = document.getElementsByClassName('cardHider') //declaring the back card images
 
             for (let i = 0; i < hiders.length; i++){
                  setTimeout(() => {
-                    hiders[i].style.display = 'none';
-                    shortFlip.load();     
-                    shortFlip.play();
+                    if(opponentFolds[Math.floor(i / 2)/*checking if the opponent has folded*/]===false){
+                        hiders[i].style.display = 'none';
+                        shortFlip.load();     
+                        shortFlip.play();
+                    }
+    
 
-                 }, 300 * (i + 1)); 
+                 }, 400 * (i + 1)); 
             }
 
-            
+            mainButtons.style.visibility = 'hidden'
+            setTimeout(() => {
+                nextButton.style.visibility = 'visible'
+            }, 2400); 
    
 
             opp1ResultDiv.innerHTML = ""
@@ -1106,7 +1234,7 @@ console.log(commCardsArray)
             setTimeout(() => checkOppHand(), 1800); // Third call after 1.5 seconds
 
             setTimeout(() => checkPlayerHand(), 2100);
-            setTimeout(() => checkWhoWins(), 2400);
+            setTimeout(() => checkWhoWins() , 2400);
 
             setTimeout(() => {
                 pot = 0;  // Reset pot to 0
@@ -1118,6 +1246,8 @@ console.log(commCardsArray)
             break;
         case 8:
             document.getElementById('storedBalance').value = balance;
+            rangeSlider.max = balance;
+
             form.submit();
             break;
         default:
@@ -1125,7 +1255,29 @@ console.log(commCardsArray)
 
     }
     stage++;
+
 }
+
+
+updateSliderValue();
+function updateSliderValue() {
+    const value = rangeSlider.value;
+
+    sliderValueDisplay.textContent = `L£${numberWithSpaces(value)}`
+
+
+
+    const percentage = (value - rangeSlider.min) / (rangeSlider.max - rangeSlider.min) * 100;
+    sliderValueDisplay.style.left = `${percentage}%`; 
+    //moves the valueText above the slider thumb (Stolen from chatgpt)
+
+}
+rangeSlider.addEventListener('input', updateSliderValue); //whenever range slider is 'slid'
+
+// Set initial display value
+
+
+
 
 let hand = []
 let dealt = false;
@@ -1482,21 +1634,21 @@ function checkOppHand(){
 
  
 
-    if (opponentFold1 === true) {
+    if (opponentFolds[0] === true) {
         opp1ResultDiv.innerHTML = 'FOLDEDDD'
         opp1HandValue = 0
     }else if(oppHandValNum === 1){
         opp1ResultDiv.innerHTML = resultText;
     }
 
-    if (opponentFold2 === true) {
+    if (opponentFolds[1] === true) {
         opp2ResultDiv.innerHTML = 'FOLDEDDD'
         opp2HandValue = 0
     }else if(oppHandValNum === 2){
         opp2ResultDiv.innerHTML = resultText;
     }
 
-    if (opponentFold3 === true) {
+    if (opponentFolds[2] === true) {
         console.log('HIIII')
         opp3ResultDiv.innerHTML = 'FOLDEDDD'
         opp3HandValue = 0
@@ -1509,7 +1661,7 @@ function checkOppHand(){
 
 
     // console.log(oppHandValNum)
-    resultDiv.innerHTML = resultText;
+    // resultDiv.innerHTML = resultText;
     // winResultDiv.innerHTML = `The value of your hand is ${playerHandValue}`;
     // winResultDiv.innerHTML =`The value of opponent ${oppHandValNum}'s hand is ${handValue}`;
 }
@@ -1536,13 +1688,13 @@ function highCard(array){//function takes the winners array (for less confusion)
     let sums = {}
 
     array.forEach(winner => { //looping thtough all the winners, and adding the highest card in their hand to the highestCards object
-        if (winner === 'Opponent 1') {
+        if (winner === 'Dallas') {
             highestCards[winner] = getHighestCard(oppHandVals1);
             sums[winner] = getSum(oppHandVals1);
-        } else if (winner === 'Opponent 2') {
+        } else if (winner === 'G-Money') {
             highestCards[winner] = getHighestCard(oppHandVals2);
             sums[winner] = getSum(oppHandVals2);
-        } else if (winner === 'Opponent 3') {
+        } else if (winner === 'Gary') {
             highestCards[winner] = getHighestCard(oppHandVals3);
             sums[winner] = getSum(oppHandVals3);
         } else if (winner === 'Player') {
@@ -1568,6 +1720,8 @@ function highCard(array){//function takes the winners array (for less confusion)
     } else {
         winResultDiv.innerHTML = `The winner is: ${finalFinalWinners[0]} by high card ${highestCardValue}`;
     }
+    winResultDiv.style.animation = 'slideDown 1.5s ease forwards'; // Start the animation
+    winResultDiv.style.opacity = '1'; 
 
 }
 // Function that calculates the sum of an array's values (I stole it)(also I'm not using this function anymore)
@@ -1585,23 +1739,23 @@ let winners = [];
 function checkWhoWins(){
 
 
-    winners.push('Opponent 3'); //opponent three is default winner
+    winners.push('Gary'); //opponent three is default winner
 
     // let winner = 'Opponent 3';
     let highestHandValue = opp3HandValue;
 
     //opp1
     if (opp1HandValue > highestHandValue) {
-        winners = ['Opponent 1']; //reset the array, ONLY ONE WINNER
+        winners = ['Dallas']; //reset the array, ONLY ONE WINNER
         highestHandValue = opp1HandValue;
 
     }else if (opp1HandValue === highestHandValue){
-        winners.push('Opponent 1');
+        winners.push('Dallas');
 
     }
     //opp2
     if (opp2HandValue > highestHandValue) {
-        winners = ['Opponent 2'];
+        winners = ['G-Money'];
         highestHandValue = opp2HandValue;
     }else if (opp2HandValue === highestHandValue){
         winners.push('Opponent 2');
@@ -1633,12 +1787,17 @@ function checkWhoWins(){
     } else {
         winResultDiv.innerHTML = (`The winner is: ${winners[0]}`);
     }
+
+    winResultDiv.style.animation = 'slideDown 1.5s ease forwards'; // Start the animation
+    winResultDiv.style.opacity = '1'; 
     // winResultDiv.innerHTML = `${winner} wins `
 
     switch (winners[0]){
 
         case 'Player':
             // alert('player')
+            let winAudio = new Audio('win_sound.wav');
+            winAudio.play()
             balance += pot
             balanceText.innerHTML =  (`L£${numberWithSpaces(balance)}`);
             document.getElementById('storedBalance').value = balance;
@@ -1677,29 +1836,30 @@ function check(){
     console.log('checked')
 }
 const raiseContainerDiv = document.getElementById('raiseContainer')
-let raiseState = 0;
-function raise(){
-    console.log('called')
+raiseContainerDiv.style.visibility = 'hidden'
+mainButtons.style.visibility = 'hidden'
 
-    if(raiseState===0){
-        raiseState++
-        raiseContainerDiv.style.display = 'block'
-    }else{
-        raiseState = 0;
-        raiseContainerDiv.style.display = 'none'
-    }
+function raise(){
+    raiseContainerDiv.style.visibility = 'visible'
+    mainButtons.style.visibility = 'hidden'
 
 }
+function exitRaise(){
+    raiseContainerDiv.style.visibility = 'hidden'
+    mainButtons.style.visibility = 'visible'
+}
+
 let pot = 0;
 let howMuch = 10;
 let submitRaiseButtonDiv = document.getElementById('submitRaiseButton')
 let howMuchRaiseDiv = document.getElementById('howMuchRaise')
 
 function submitRaise(){
+    raiseContainerDiv.style.visibility = 'hidden'
 
-    if(balance >= parseInt(howMuchRaiseDiv.value)){
-        pot += parseInt(howMuchRaiseDiv.value)
-        balance -= parseInt(howMuchRaiseDiv.value)
+    if(balance >= parseInt(raiseNum.value)){
+        pot += parseInt(raiseNum.value)
+        balance -= parseInt(raiseNum.value)
         balanceText.innerHTML = `L£${numberWithSpaces(balance)}`
 
         potDiv.innerHTML = (`L£${numberWithSpaces(pot)}`)
@@ -1722,9 +1882,12 @@ function bet(){
     handDiv.innerHTML = balance
 }
 
-let opponentFold1 = false;
-let opponentFold2 = false;
-let opponentFold3 = false;
+const opponentFolds = [
+    false,  // opponentFold1
+    false,  // opponentFold2
+    false   // opponentFold3
+]
+
 
 
 let botBalance1 = 1000000;
@@ -1753,11 +1916,11 @@ function opponentDecision(whichOpponent){
     // console.log(whichOpponent)
     // console.log(randNum)
 
-    if(whichOpponent===1 && opponentFold1 === false){
+    if(whichOpponent===1 && opponentFolds[0] === false){
         if(randNum === 0){//*FOLDING----------
             // console.log(`opponent ${1} folded`)
             opp1ResultDiv.innerHTML = 'folded'
-            opponentFold1 = true
+            opponentFolds[0] = true
         }
         if((randNum > 1 && randNum <50)){//*CHECKING/CALLING------------
             const randomIndex = Math.floor(Math.random() * knocks.length);
@@ -1769,7 +1932,7 @@ function opponentDecision(whichOpponent){
 
 
         }
-        if((randNum >= 50 && randNum <100)){ //*RASING----------
+        if((randNum >= 50 && randNum <=100)){ //*RASING----------
             moneySound.play()
             // console.log(`opponent ${1} raised`)
             botRaise(botBalance1) //raise with the first bot's balance
@@ -1788,12 +1951,13 @@ function opponentDecision(whichOpponent){
     }
     
 
-    if(whichOpponent===2 && opponentFold2 === false){
+    if(whichOpponent===2 && opponentFolds[1] === false){
         if(randNum === 0){//*FOLDING---------
         
             // console.log(`opponent ${2} folded`)
             opp2ResultDiv.innerHTML = 'folded'
-            opponentFold2 = true
+            opponentFolds[1] = true
+            console.log(opponentFolds[1])
         }
         if((randNum > 1 && randNum <50)){//*CHECKING/CALLING----------
             const randomIndex = Math.floor(Math.random() * knocks.length);
@@ -1805,7 +1969,7 @@ function opponentDecision(whichOpponent){
             opp2ResultDiv.innerHTML = 'checked'
    
         }
-        if((randNum >= 50 && randNum <100)){//*RASING-----------
+        if((randNum >= 50 && randNum <=100)){//*RASING-----------
             moneySound.play()
             // console.log(`opponent ${2} raised`)
             botRaise(botBalance2) //raise with the second bot's balance
@@ -1821,11 +1985,11 @@ function opponentDecision(whichOpponent){
 
         }
     }
-    if(whichOpponent===3  && opponentFold3 === false){
+    if(whichOpponent===3  && opponentFolds[2] === false){
         if(randNum === 0){//*FOLDING---------
             // console.log(`opponent ${3} folded`)
             opp3ResultDiv.innerHTML = 'folded'
-            opponentFold3 = true
+            opponentFolds[2] = true
         }
         if((randNum > 1 && randNum <50)){//*CHECKING/CALLING-----------
             const randomIndex = Math.floor(Math.random() * knocks.length);
@@ -1836,7 +2000,7 @@ function opponentDecision(whichOpponent){
             opp3ResultDiv.innerHTML = 'checked'
 
         }
-        if((randNum >= 50 && randNum <100)){//*RASING------------
+        if((randNum >= 50 && randNum <=100)){//*RASING------------
             moneySound.play()
             // console.log(`opponent ${3} raised`)
             botRaise(botBalance3) //raise with the third bot's balance

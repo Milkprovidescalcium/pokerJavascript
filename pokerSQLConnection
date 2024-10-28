@@ -142,6 +142,7 @@ session_start();
         }
 
         .button-container {
+            z-index:999;
             position: absolute;
             bottom: 60px; /* Position buttons above the hand and results */
             left: 50%;
@@ -343,11 +344,14 @@ session_start();
 
 
         .raise-container{
-            position: relative;
+            position: absolute;
             display:flex;
             align-items:center;
+
+        
+
             z-index:1;
-            width:25%;
+            width:35%;
         }
         .play-button{
             visibility: visible;
@@ -492,6 +496,8 @@ session_start();
         #card5{visibility: hidden}
 
         .results{/*general style for hand results*/
+
+            margin:5px;
             text-align: center;
             font-size:20px;
             font-weight:bold;
@@ -510,7 +516,7 @@ session_start();
             z-index:999;
         }
         .win-result{
-            z-index:999;
+            z-index:50;
             text-align: center;
             font-size:30px;
             font-weight:bold;
@@ -536,48 +542,143 @@ session_start();
 
       
         .raise-num {
-        -webkit-appearance: none;
-        width: 100%;
-        height: 20px;
-        background: #d3d3d3;
-        outline: none;
-        opacity: 0.7;
-        -webkit-transition: .2s;
-        transition: opacity .2s;
+            -webkit-appearance: none;
+            width: 100%;
+            height: 25px;
+            background-color: rgb(212, 49, 26);
+            border: 3px solid rgb(10 10 10);
+            opacity: 1;
+            -webkit-transition: .3s;
+            transition: transform 0.3s ease;
+
+            border-radius:6px;
+
         }
 
         .raise-num:hover {
-        opacity: 1;
+            transform: scale(1.05);
         }
 
         .raise-num::-webkit-slider-thumb {
         -webkit-appearance: none;
         appearance: none;
         width: 20px;
-        height: 25px;
+        height: 35px;
         background: #04AA6D;
+        border: 2.5px solid rgb(10 10 10);
         cursor: pointer;
+
+        background: linear-gradient(to bottom, rgb(45 45 45) 50%, rgb(25 25 25) 50%);
+        background-size: 100% 100%;/*for constistent gradient size when re-size*/
+        background-position: top;
+         transition: transform 0.2s ease;
+
+        }
+
+        .raise-num:hover::-webkit-slider-thumb {
+            transform: scale(1.05); /* Scale the thumb on hover */
         }
 
         .raise-num::-moz-range-thumb {
         width: 20px;
-        height: 25px;
+        height: 35px;
         background: #04AA6D;
+        border: 2.5px solid rgb(10 10 10);
         cursor: pointer;
+
+        background: linear-gradient(to bottom, rgb(45 45 45) 50%, rgb(25 25 25) 50%);
+        background-size: 100% 100%;/*for constistent gradient size when re-size*/
+        background-position: top;
+        transition: transform 0.2s ease;
+
+        }
+
+        .raise-num:hover::-moz-range-thumb {
+            transform: scale(1.05); /* Scale the thumb on hover */
         }
         .play-button{
             position:absolute;
             z-index:999;
         }
         #sliderValue{
-            position: absolute; /* Position the value text absolutely */
+            margin:15px;
             bottom: 30px; /* Position it above the slider */
-            left: 50%; /* Center it horizontally */
-            transform: translateX(-50%); /* Adjust to center */
-            font-size: 20px;
-            color: #000;
-            transition: left 0.1s; /* Smooth movement */
+
+            text-align: center;
+            font-size:30px;
+            font-weight:bold;
+            text-shadow: 3px 0 #000, -2px 0 #000, 0 3px #000, 0 -3px #000,
+            2px 2px #000, -2px -2px #000, 2px -2px #000, -2px 2px #000;
+
+            color:rgb(255 255 255);
+
+
         }
+        .button-style{
+            z-index:999;
+            cursor: pointer;
+            margin:10px;
+            height:50px;
+            width:150px;
+
+            font-size:22px;
+            font-family: 'Poppins', sans-serif;
+
+            font-weight:bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8), 
+            -1px -1px 2px rgba(255, 255, 255, 0.2); 
+
+            color:rgb(255 255 255);
+
+            border: 3px solid black;
+            border-radius:10px;
+
+            background: linear-gradient(to bottom, rgb(25, 25, 25) 50%, rgb(5, 5, 5) 50%);
+            background-size: 100% 100%;/*for constistent gradient size when re-size*/
+            background-position: top;
+
+            transition: transform 0.2s ease;
+        }
+        .raise-button-style { 
+            cursor: pointer;
+            margin:10px;
+            height:50px;
+            width:150px;
+
+            font-size:22px;
+            font-family: 'Poppins', sans-serif;
+
+            font-weight:bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8), 
+            -1px -1px 2px rgba(255, 255, 255, 0.2); 
+
+            color:rgb(255 255 255);
+
+            border: 3px solid black;
+            border-radius:10px;
+
+            background: linear-gradient(to bottom, rgb(45, 45, 45) 50%, rgb(25, 25, 25) 50%);
+            background-size: 100% 100%;/*for constistent gradient size when re-size*/
+            background-position: top;
+
+            transition: transform 0.2s ease;
+
+   
+        }
+        .button-style:hover{
+            transform: scale(1.1);
+        }
+        .slider-container{
+            position:relative;
+            margin: 10px;
+            width:100%;
+            /* border: 3px solid green; */
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+        }
+
 
     </style>
 </head>
@@ -593,6 +694,7 @@ session_start();
     
         <div id = 'logoutContainer'>
             <a href = "logout.php">logout</a>
+            but why would you do that?
         </div>
         <div id = 'balanceContainer' class = 'balance-container'>
           
@@ -764,20 +866,22 @@ session_start();
             <div id = 'buttonContainer' class = 'button-container'>
        
                 <div class="mainButtonsContainer">
-                    <button onclick="playerFold()"type = "button" id = "foldButton" class = 'fold-button'>fold</button>
-                    <button onclick="check()"type = "button" id = "checkButton" class = 'check-button'>check</button>
+                    <button onclick="playerFold()"type = "button" id = "foldButton" class = 'fold-button button-style'>Fold</button>
+                    <button onclick="check()"type = "button" id = "checkButton" class = 'check-button button-style'>Check</button>
                     
-                    <button onclick="raise()"type = "button" id = "raiseButton" class = 'raise-button'>raise</button>
+                    <button onclick="raise()"type = "button" id = "raiseButton" class = 'raise-button button-style'>Raise</button>
                  
                 </div>
                 <div id = "raiseContainer" class = 'raise-container'>
-                        <button onclick="exitRaise()"type = "button" id = "exitRaiseButton" class = 'exit-raise-button'>exit</button>
-                        <span id="sliderValue">50</span>
-                        <input type="range" min="1" max="100" value="50" class="raise-num" id="raiseNum">
-                        <button onclick="submitRaise()"type = "button" id = "submitRaiseButton" class = 'submit-raise-button'>Ok</button>
+                        <button onclick="exitRaise()"type = "button" id = "exitRaiseButton" class = 'exit-raise-button button-style raise-button-style'>Exit</button>
+                        <div class = 'slider-container'>
+                            <span id="sliderValue">50</span>
+                            <input type="range" min="1" max="<?php echo $balance; ?>" value="50" class="raise-num" id="raiseNum">
+                        </div>
+                        <button onclick="submitRaise()"type = "button" id = "submitRaiseButton" class = 'submit-raise-button button-style raise-button-style'>Ok</button>
                  </div>
-                <button onclick="play()"type = "button" id = "playButton" class = 'play-button'>play</button>
-                <button onclick="next()"type = "button" id = "nextButton" class = 'next-button'>next</button>
+                <button onclick="play()"type = "button" id = "playButton" class = 'play-button button-style'>Play</button>
+                <button onclick="next()"type = "button" id = "nextButton" class = 'next-button button-style'>Next</button>
              
             </div>
         </div>
@@ -793,10 +897,26 @@ session_start();
     -->
     
 
+
+
 <script> 
 document.addEventListener("DOMContentLoaded", function() {
     document.body.style.display = 'block'; // Show body after styles are loaded
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1055,6 +1175,8 @@ let mainButtons = document.querySelector('.mainButtonsContainer')
 let nextButton = document.getElementById('nextButton')
 
 const funnyMusic = new Audio('funnyMusic.mp3');
+const clickSound = new Audio('ui-click.wav');
+const clickSound2 = new Audio('button-click2.wav');
 
 const form = document.getElementById('balanceForm');//form to submit for php
 
@@ -1084,9 +1206,7 @@ const commCardsArray = [
     card5 = document.getElementById('card5')
 ]
 
-const rangeSlider = document.getElementById('raiseNum');
-rangeSlider.max = balance;
-const sliderValueDisplay = document.getElementById('sliderValue');
+
 
 let ifRaised = false;//checking if the bot or player has raised, if they have, instead of checking the next bot has to call to that value
 function flipCommunityCards(){
@@ -1238,7 +1358,7 @@ console.log(commCardsArray)
 
             setTimeout(() => {
                 pot = 0;  // Reset pot to 0
-                potDiv.innerHTML = `L£${pot}`; 
+                potDiv.innerHTML = `L£${numberWithSpaces(pot)}`; 
             }, 2700);
 
             
@@ -1246,7 +1366,7 @@ console.log(commCardsArray)
             break;
         case 8:
             document.getElementById('storedBalance').value = balance;
-            rangeSlider.max = balance;
+            slider.max = balance;
 
             form.submit();
             break;
@@ -1259,24 +1379,24 @@ console.log(commCardsArray)
 }
 
 
-updateSliderValue();
+//SCRIPT TO MAKE TET HOVER OVER SLIDER THUMB (Stolen from)
+const slider = document.getElementById('raiseNum');
+slider.max = balance;
+const sliderValue = document.getElementById('sliderValue');
+
 function updateSliderValue() {
-    const value = rangeSlider.value;
 
-    sliderValueDisplay.textContent = `L£${numberWithSpaces(value)}`
+    const value = parseInt(slider.value);
+
+    sliderValue.textContent = `L£${numberWithSpaces(value)}`;
 
 
-
-    const percentage = (value - rangeSlider.min) / (rangeSlider.max - rangeSlider.min) * 100;
-    sliderValueDisplay.style.left = `${percentage}%`; 
-    //moves the valueText above the slider thumb (Stolen from chatgpt)
 
 }
-rangeSlider.addEventListener('input', updateSliderValue); //whenever range slider is 'slid'
 
-// Set initial display value
-
-
+// Initial update and event listener
+updateSliderValue();
+slider.addEventListener('input', updateSliderValue);
 
 
 let hand = []
@@ -1424,15 +1544,18 @@ let pairsFound = [];
 function checkPair(wholeHandVals, excludeVal = null) {
     let pairNum = 0;
     let countedPairs = new Set();
+    let whatPair;
 
     for(let index = 0; index < values.length; index++) {
         let searchPair = values[index];
         let pairCount = 0;  
 
+
         // Skip the value if it's in the exclude set or already counted
         if (countedPairs.has(searchPair) || searchPair === excludeVal) {
             continue;
         }
+
 
         for(let i = 0; i < wholeHandVals.length; i++) {
             if (wholeHandVals[i] === searchPair) {
@@ -1441,12 +1564,14 @@ function checkPair(wholeHandVals, excludeVal = null) {
             if (pairCount === 2) {
                 pairNum++;
                 countedPairs.add(searchPair);  // Mark this pair as found
+                whatPair = searchPair
+                console.log(whatPair)
                 break;
             }
         }
     }
     // console.log(countedPairs)
-    return pairNum;
+    return [pairNum,whatPair]
 
 }
 
@@ -1518,26 +1643,27 @@ function checkPlayerHand() {
     
     // Generate the combined hand of player and community cards
     let { wholeHandVals, wholeHandSuites } = combineArrays(handVals, communityVals, handSuites, communitySuites);
+    let [pairNum, whatPair] = checkPair(wholeHandVals);
     // Check for different hand types
     let resultText = '';
     if (checkStraight(wholeHandVals)) {
-        resultText = 'Straight';
-        playerHandValue  = 8;
+        resultText = 'Straight!';
+        playerHandValue  = 44;
     } else if (checkFour(wholeHandVals)) {
         resultText = 'Four of a kind!';
-        playerHandValue  = 7;
+        playerHandValue  = 43;
     } else if (checkFull(wholeHandVals)) {
         resultText = 'Full house!';
-        playerHandValue  = 6;
+        playerHandValue  = 42;
     } else if (checkFlush(wholeHandSuites)) {
         resultText = 'Flush!';
-        playerHandValue  = 5;
+        playerHandValue  = 41;
     } else if (checkThree(wholeHandVals)) {
         resultText = 'Three of a kind!';
-        playerHandValue  = 4;
-    } else if (checkPair(wholeHandVals)) {
-        resultText = checkPair(wholeHandVals) + ' pairs!';
-        playerHandValue  = checkPair(wholeHandVals);
+        playerHandValue  = 40;
+    } else if (pairNum) {
+        resultText = pairNum + ' pairs!';
+        playerHandValue  = pairNum * whatPair;//max value of 39 (I know It's not 'real' poker) 
     } else {
         resultText = 'Wow nothing!';
         playerHandValue  = 0;
@@ -1562,6 +1688,7 @@ let opp3ResultDiv = document.getElementById('opp3Result');
 function checkOppHand(){
     oppHandValNum++
 
+
     if(oppHandValNum === 1){ //what the freak does opphandvalnum mean
 
         whichOppHandVals = oppHandVals1
@@ -1585,31 +1712,31 @@ function checkOppHand(){
     let handValue = 0;
 
     let { wholeHandVals, wholeHandSuites } = combineArrays(whichOppHandVals, communityVals, whichOppHandSuites, communitySuites);
-    
+    let [pairNum, whatPair] = checkPair(wholeHandVals);
     
     // console.log(wholeHandVals)
     // console.log(wholeHandSuites)
     // Check for different hand types
     let resultText = '';
     if (checkStraight(wholeHandVals)) {
-        resultText = 'Straight';
-        handValue = 8;
+        resultText = 'Straight!';
+        handValue = 44;
     } else if (checkFour(wholeHandVals)) {
         resultText = 'Four of a kind!';
-        handValue = 7;
+        handValue = 43;
     } else if (checkFull(wholeHandVals)) {
         resultText = 'Full house!';
-        handValue = 6;
+        handValue = 42;
     } else if (checkFlush(wholeHandSuites)) { 
         resultText = 'Flush!';
-        handValue = 5;
+        handValue = 41;
     } else if (checkThree(wholeHandVals)) {
         resultText = 'Three of a kind!';
-        handValue = 4;
-    } else if (checkPair(wholeHandVals)) {
-        resultText = checkPair(wholeHandVals) + ' pairs!';
-        handValue = checkPair(wholeHandVals);
-        // console.log(handValue)
+        handValue = 40;
+    } else if (pairNum) {
+        resultText = pairNum + ' pairs!';
+        handValue = pairNum * whatPair;//max value of 39
+        console.log(handValue)
 
     } else {
         resultText = 'Wow nothing!';
@@ -1698,6 +1825,8 @@ function highCard(array){//function takes the winners array (for less confusion)
             highestCards[winner] = getHighestCard(oppHandVals3);
             sums[winner] = getSum(oppHandVals3);
         } else if (winner === 'Player') {
+            let winAudio = new Audio('win_sound.wav');
+            winAudio.play()
             highestCards[winner] = getHighestCard(handVals);
             sums[winner] = getSum(handVals);
         }
@@ -1840,11 +1969,15 @@ raiseContainerDiv.style.visibility = 'hidden'
 mainButtons.style.visibility = 'hidden'
 
 function raise(){
+    clickSound.load()
+    clickSound.play()
     raiseContainerDiv.style.visibility = 'visible'
     mainButtons.style.visibility = 'hidden'
 
 }
 function exitRaise(){
+    clickSound.load()
+    clickSound.play()
     raiseContainerDiv.style.visibility = 'hidden'
     mainButtons.style.visibility = 'visible'
 }
@@ -1858,6 +1991,7 @@ function submitRaise(){
     raiseContainerDiv.style.visibility = 'hidden'
 
     if(balance >= parseInt(raiseNum.value)){
+        moneySound.play()
         pot += parseInt(raiseNum.value)
         balance -= parseInt(raiseNum.value)
         balanceText.innerHTML = `L£${numberWithSpaces(balance)}`
@@ -2050,10 +2184,12 @@ function botRaise(whichBotBalance){//returns a random raise value
 }
 
 function play(){
+
     flipCommunityCards()
   
 }
 function next(){
+
     flipCommunityCards()
 
 }
@@ -2100,9 +2236,16 @@ function next(){
 //*Make an array that stores all winners? And if theres more than one winner, go to function that decides high card
 //*Grab the highest card from each of the players, and see who's the highest
 
-//Oct-23-2024------
+//Oct-23-2024------DONE
 //!PROBLEM, High cards only evaluate in pairs if the high card is higher than the pair.
 //*Solution, make the high card logic evaluate the sum of the hand instead of the highest card in the hand
+
+
+//Oct-24-2024------
+//!PROBLEM, The max value of the raise slider is not updated after the player has raised
+//!PROBLEM, The raise slider value text is not centered above the thumb
+//!PROBLEM, When the 'your broke' alert happens, all buttons become invisible (player gets softlocked)
+
 </script>
 
 </body>
